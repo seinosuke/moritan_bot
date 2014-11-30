@@ -10,6 +10,7 @@ module Moritan
       when /^階数$/
         text.sub!(/#{func_name}.?/m, "")
         ans += text.to_mat.rank.to_s
+
       when /^逆行列$/
         text.sub!(/#{func_name}.?/m, "")
         mat = text.to_mat.inverse
@@ -19,10 +20,12 @@ module Moritan
           row.gsub!(/, $/,"")
           ans += row
         end
+
       when /^行列式$/
         text.sub!(/#{func_name}.?/m, "")
         det = text.to_mat.determinant.to_integer
         ans += "#{det}"
+
       else 
         ans = @warning_message
       end
@@ -101,7 +104,8 @@ module Moritan
         if imaginary
           b        = "" if b.zero?
           root_out = "" if root_out == 1
-          return "#{b}±#{root_out}i"
+          return "#{b}±#{root_out}i" if denom == 1
+          return "(#{b}±#{root_out}i)/#{denom}"
         else
           ans1 = Rational(b + root_out, denom).to_integer
           ans2 = Rational(b - root_out, denom).to_integer
