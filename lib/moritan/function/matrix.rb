@@ -2,10 +2,10 @@
 
 module Moritan
   module Matrix
-
     def cal_etc(text)
       func_name = text.split("\n")[0]
       ans = "#{func_name} "
+
       case func_name
       when /^階数$/
         text.sub!(/#{func_name}.?/m, "")
@@ -47,8 +47,35 @@ module Moritan
       text.sub!(/(固有値).?/m, "")
       mat = text.to_mat
       ans = "#{func_name} "
-      if mat.column_size == 2 && mat.row_size == 2
-        ans += eigen_2(mat)
+
+      case [mat.column_size, mat.row_size]
+      when [2, 2]
+        b = mat[0, 0] + mat[1, 1]
+        c = mat.determinant
+        # どちらかが0であっても（0/1）になっているのでlcmをとれる
+        bc_lcm = b.denominator.lcm(c.denominator)
+        a = bc_lcm
+        b = b.numerator * (bc_lcm / b.denominator)
+        c = c.numerator * (bc_lcm / c.denominator)
+        ans += solve_equation2(a, b, c)
+
+      when [3, 3]
+        b = -(mat[0,0] + mat[1,1] + mat[2,2])
+        c = mat[0,0]*mat[1,1] + mat[1,1]*mat[2,2] + mat[2,2]*mat[0,0] -
+            mat[0,1]*mat[1,0] - mat[1,2]*mat[2,1] - mat[2,0]*mat[0,2]
+        d = -mat.determinant
+        bcd_lcm = [b.denominator, c.denominator, d.denominator].lcm
+        a = bcd_lcm
+        b = b.numerator * (bcd_lcm / b.denominator)
+        c = c.numerator * (bcd_lcm / c.denominator)
+        d = d.numerator * (bcd_lcm / d.denominator)
+        if solve_equation3(a, b, c, d)
+          ans += solve_equation3(a, b, c, d)
+        else
+          e_mat = mat.eigen.d
+          ans += "\n#{e_mat[0,0]}\n#{e_mat[1,1]}\n#{e_mat[2,2]}"
+        end
+
       else
         e_mat = mat.eigen.d
         e_mat.column_size.times{|i| ans += "\n#{e_mat[i, i]}"}
@@ -63,14 +90,8 @@ module Moritan
 
     module_function
 
-    def eigen_2(mat)
-      b = (mat[0, 0] + mat[1, 1])
-      c = mat.determinant
-      bc_lcm = b.denominator.lcm(c.denominator)
-      a = bc_lcm
+    def solve_equation2(a, b, c)
       denom = a*2
-      b = b.numerator * (bc_lcm / b.denominator)
-      c = c.numerator * (bc_lcm / c.denominator)
       imaginary = false
       root_in = b**2 - 4*a*c
       if root_in < 0
@@ -120,8 +141,54 @@ module Moritan
       return "#{b}±#{root_out}√#{root_in}" if denom == 1
       return "(#{b}±#{root_out}√#{root_in})/#{denom}"
 
+    # 重解
     rescue ZeroDivisionError
-      return "#{Rational(b, denom).to_integer}"
+      return "#{Rational(b, denom).to_integer} (重解)"
+    end
+
+    def solve_equation3(a, b, c, d)
+      # puts "#{a}λ^3 + #{b}λ^2 + #{c}λ + #{d} = 0"
+      case [b.zero?, c.zero?, d.zero?]
+      when [false,false,false], [true,false,false], [false,true,false]
+        solution = find_solution(a, b, c, d)
+        if solution
+          aa = a / (solution.denominator)
+          cc = d / (-solution.numerator)
+          bb = (solution.denominator*cc - c) / (solution.numerator)
+          # puts "#{aa}λ^2 + #{bb}λ + #{cc}"
+          ans1 = solution.to_integer.to_s
+          ans2 = solve_equation2(aa, -bb, cc).gsub("\s\(重解\)","")
+          # ans2にans1が含まれてたら重解表示する感じにしたい（予定）
+          return "#{ans1} (3重解)" if ans1 == ans2
+          return "#{ans1}、 #{ans2}"
+        end
+        return
+
+      when [true,true,false]
+        ans = "\nω = (-1+√3i)/2" +
+              "\nα = ∛(#{Rational(-d, a).to_integer}) としたとき" +
+              "\nα、 αω、 αω^2"
+        return ans
+      when [false,false,true], [true,false,true]
+        return "0、 #{solve_equation2(a, -b, c)}"
+      when [false,true,true]
+        return "0 (重解)、 #{-b/a}"
+      when [true,true,true]
+        return "0 (3重解)"
+      else
+        return
+      end
+    end
+
+    def find_solution(a, b, c, d)
+      a.divisor_list.each do |a_divisor|
+        d.divisor_list.each do |d_divisor|
+          temp = Rational(d_divisor, a_divisor)
+          return  temp if (a*(temp**3)    + b*(temp**2)    + c*temp + d) == 0
+          return -temp if (a*((-temp)**3) + b*((-temp)**2) - c*temp + d) == 0
+        end
+      end
+      return
     end
   end
 end

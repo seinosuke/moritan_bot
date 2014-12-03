@@ -24,10 +24,29 @@ class Integer
   def divided?(num)
     return self%num == 0 ? true : false
   end
+
+  def divisor_list
+    num = -self if self < 0
+    num ||= self
+    return [1] if num == 1
+    Prime.prime_division(num).map do |e|
+      Array.new(e[1]+1).map.with_index do |element, i|
+        e[0]**i
+      end
+    end.inject{|p,q| p.product(q)}.map do |a|
+      [a].flatten.inject(&:*)
+    end.sort
+  rescue ZeroDivisionError
+    return
+  end
 end
 
 class Array
   def gcd
     self.inject{|a,b| a.gcd(b)}
+  end
+
+  def lcm
+    self.inject{|a,b| a.lcm(b)}
   end
 end
