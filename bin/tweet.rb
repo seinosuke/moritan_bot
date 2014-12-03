@@ -11,7 +11,7 @@ end
 
 puts "debug mode" if debug
 $moritanbot = Moritan::Bot.new(debug:debug)
-$times = ['00:00','04:00','08:00','12:00','16:00','20:00']
+$times = ['00:00','04:00','08:00','10:00','12:00','14:00','16:00','20:00']
 
 module Clockwork
   handler do |job|
