@@ -7,6 +7,8 @@ require 'yaml'
 require 'pp'
 require 'active_record'
 require 'open3'
+require 'uri'
+require 'net/http'
 require 'net/ping'
 require 'net/ssh'
 require 'matrix'
@@ -14,6 +16,8 @@ require 'complex'
 require 'prime'
 require 'nkf'
 require 'clockwork'
+require 'json'
+require 'openssl'
 
 require_relative "moritan/function/helper"
 # require_relative "moritan/database/helper"

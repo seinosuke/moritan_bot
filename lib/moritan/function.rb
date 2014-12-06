@@ -8,7 +8,7 @@ module Moritan
 
     attr_accessor :rep_table, :ssh_config
 
-    def initialize(table, ssh)
+    def initialize(table, ssh, api_key)
       @rep_table = table
       site_url = "https://sites.google.com/site/moritanbot/home"
       @warning_message = "\nフォーマットが違います\n" +
@@ -21,6 +21,7 @@ module Moritan
           port:22
         }
       }
+      @api_key = api_key
     end
   end
 end

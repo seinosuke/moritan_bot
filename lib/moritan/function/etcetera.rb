@@ -26,7 +26,7 @@ module Moritan
     end
 
     # どのキーワードにも当てはまらなかったら
-    def conversation(contents)
+    def converse(contents)
       text = nil
       catch(:exit) do
         if contents.match(@rep_table['self'][0])
@@ -42,8 +42,29 @@ module Moritan
         end
       end
 
+      text ||= talk(contents)
       text ||= @rep_table['terms'].sample
       return text
+    end
+
+    module_function
+
+    def talk(contents)
+      uri = URI.parse("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{@api_key}")
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+      body = Hash['utt' => contents]
+      request = Net::HTTP::Post.new(uri.request_uri, {'Content-Type' =>'application/json'})
+      request.body = body.to_json
+      response = http.start do |h|
+        resp = h.request(request)
+        JSON.parse(resp.body)
+      end
+      return response['utt']
+    rescue JSON::ParserError
+      return
     end
   end
 end

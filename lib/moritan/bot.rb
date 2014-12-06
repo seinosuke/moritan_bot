@@ -11,7 +11,7 @@ module Moritan
     def initialize(debug:false, mention:false)
       @config = YAML.load_file('./config.yml')
 
-      @function = Moritan::Function.new(@config['ReplayTable'], @config['ssh'])
+      @function = Moritan::Function.new(@config['ReplayTable'], @config['ssh'], @config['api_key'])
       @name = debug ? @config['name_debug'] : @config['name']
 
       oauth = debug ? 'oauth_debug' : 'oauth'
@@ -135,9 +135,9 @@ module Moritan
           @function.mark(contents)
 
         else # どのキーワードにも当てはまらなかったら
-          @function.conversation(contents)
+          @function.converse(contents)
         end
-      rep_text ||= @function.conversation(contents)
+      rep_text ||= @function.converse(contents)
       return rep_text
 
     rescue

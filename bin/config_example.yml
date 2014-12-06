@@ -17,6 +17,8 @@ ssh:
   username: 
   password: 
 
+api_key: 
+
 ReplayTable:
   self:
     - !ruby/regexp /(moritan|もりたん)(bot|ぼっと|ボット)?/i
