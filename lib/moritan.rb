@@ -19,7 +19,7 @@ require 'clockwork'
 require 'json'
 require 'openssl'
 
-require_relative "moritan/function/helper"
+require_relative "moritan/function/extensions"
 # require_relative "moritan/database/helper"
 
 def error_logs(text, message, point)
