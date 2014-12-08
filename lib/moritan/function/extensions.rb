@@ -1,5 +1,6 @@
 # coding: utf-8
 
+# 指定のフォーマットの文字列を成分がRationalである行列にして返す
 class String
   def to_mat
     return nil if self.empty?
@@ -13,6 +14,7 @@ class String
   end
 end
 
+# 分母が1のものを整数にする
 class Rational
   def to_integer
     return self.numerator if self.denominator == 1
@@ -25,14 +27,13 @@ class Integer
     return self%num == 0 ? true : false
   end
 
+  # 全ての正の約数の配列を返す
   def divisor_list
     num = -self if self < 0
     num ||= self
     return [1] if num == 1
     Prime.prime_division(num).map do |e|
-      Array.new(e[1]+1).map.with_index do |element, i|
-        e[0]**i
-      end
+      Array.new(e[1]+1).map.with_index{|element, i| e[0]**i}
     end.inject{|p,q| p.product(q)}.map do |a|
       [a].flatten.inject(&:*)
     end.sort
@@ -48,5 +49,15 @@ class Array
 
   def lcm
     self.inject{|a,b| a.lcm(b)}
+  end
+
+  # 要素数1の配列を渡すと全て[1]になる
+  # 要素が全て0の配列を渡すとnilを返す
+  # 要素に0が含まれていてもそれ以外の要素同士で作用する
+  def abbrev
+    gcd = self.gcd
+    self.map{|e| e/=gcd}
+  rescue ZeroDivisionError
+    return
   end
 end

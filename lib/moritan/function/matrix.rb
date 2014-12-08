@@ -69,7 +69,10 @@ module Moritan
         b = b.numerator * (bcd_lcm / b.denominator)
         c = c.numerator * (bcd_lcm / c.denominator)
         d = d.numerator * (bcd_lcm / d.denominator)
-        if solve_equation3(a, b, c, d)
+        if (a.to_s.size + d.to_s.size) > 12
+          e_mat = mat.eigen.d
+          ans += "\n#{e_mat[0,0]}\n#{e_mat[1,1]}\n#{e_mat[2,2]}"
+        elsif solve_equation3(a, b, c, d)
           ans += solve_equation3(a, b, c, d)
         else
           e_mat = mat.eigen.d
@@ -90,6 +93,7 @@ module Moritan
 
     module_function
 
+    # 2次方程式を解く
     def solve_equation2(a, b, c)
       denom = a*2
       imaginary = false
@@ -111,14 +115,8 @@ module Moritan
         end
       end
 
-      # 約分
-      loop do
-        gcd = [denom, b, root_out].gcd
-        break if gcd == 1
-        denom    /= gcd
-        b        /= gcd
-        root_out /= gcd
-      end
+      # 約分 
+      denom, b, root_out = [denom, b, root_out].abbrev
 
       # ルートが残らない場合
       if root_in == 1
@@ -146,6 +144,7 @@ module Moritan
       return "#{Rational(b, denom).to_integer} (重解)"
     end
 
+    # 3次方程式を解く
     def solve_equation3(a, b, c, d)
       # puts "#{a}λ^3 + #{b}λ^2 + #{c}λ + #{d} = 0"
       case [b.zero?, c.zero?, d.zero?]
@@ -180,6 +179,7 @@ module Moritan
       end
     end
 
+    # 有理数の解を見つける
     def find_solution(a, b, c, d)
       a.divisor_list.each do |a_divisor|
         d.divisor_list.each do |d_divisor|

@@ -1,2 +1,4 @@
 config.yml
 test/
+scrape.rb
+log.yml
