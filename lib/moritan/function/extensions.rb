@@ -1,16 +1,15 @@
 # coding: utf-8
 
-# 指定のフォーマットの文字列を成分がRationalである行列にして返す
+# 指定のフォーマットの文字列を成分がComplexである行列にして返す
 class String
   def to_mat
-    return nil if self.empty?
+    return nil if self.empty? || self.index(/\./)
     rows = NKF.nkf('-m0 -Z1 -w', self).split("\n")
     rows.each_with_index do |row, i|
-      return nil if row.index(/\+|＋/)
       return nil unless row.index(/,|，|、/)
       rows[i] = row.split(/,|，|、/)
     end
-    return Matrix.rows(rows, false).map(&:to_r)
+    return Matrix.rows(rows, false).map(&:to_c)
   end
 end
 
@@ -19,6 +18,17 @@ class Rational
   def to_integer
     return self.numerator if self.denominator == 1
     return self
+  end
+end
+
+# 例えば(3+0i)を3にする(後でちゃんと書き直すかも)
+class Complex
+  def visualize
+    return "0" if self.real == 0 && self.imag == 0
+    return "#{self.image.to_r.to_integer}i" if self.real == 0
+    return "#{self.real.to_r.to_integer}" if self.imag == 0
+    return "#{self.numerator}" if self.denominator == 1
+    return "(#{self.numerator})/#{self.denominator}"
   end
 end
 
