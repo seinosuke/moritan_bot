@@ -74,19 +74,19 @@ module Moritan
         c = c.numerator * (bcd_lcm / c.denominator)
         d = d.numerator * (bcd_lcm / d.denominator)
         if (a.to_s.size + d.to_s.size) > 12
-          e_mat = mat.eigen.d
+          e_mat = mat.map{|e| e.real}.eigen.d
           ans += "\n#{e_mat[0,0]}\n#{e_mat[1,1]}\n#{e_mat[2,2]}"
         elsif solve_equation3(a, b.real, c.real, d.real)
           ans += solve_equation3(a, b.real, c.real, d.real)
         else
           # eigenが対応してないっぽい
           return "その答えはまだ返せません" if text.index(/i/)
-          e_mat = mat.eigen.d
+          e_mat = mat.map{|e| e.real}.eigen.d
           ans += "\n#{e_mat[0,0]}\n#{e_mat[1,1]}\n#{e_mat[2,2]}"
         end
 
       else
-        e_mat = mat.eigen.d
+        e_mat = mat.map{|e| e.real}.eigen.d
         e_mat.column_size.times{|i| ans += "\n#{e_mat[i, i]}"}
       end
       return ans
