@@ -3,7 +3,7 @@
 module Moritan
   module Etcetera
 
-    def mark(contents)
+    def mark(contents, twitter_id)
       if contents =~ /の単位/
         subject = contents.split(/の単位/)[0]
         if subject.size > 11 || subject.empty?
@@ -13,20 +13,26 @@ module Moritan
       subject ||= "線形代数"
       rarity = @random.rand(100)
       grade = case rarity
-        when 0..4   then "A+"
-        when 5..10  then "A"
-        when 11..29 then "B"
-        when 30..69 then "C"
-        when 70..99 then "D"
+        when 0..4   then ["aa", "A+"]
+        when 5..10  then ["a",  "A" ]
+        when 11..29 then ["b",  "B" ]
+        when 30..69 then ["c",  "C" ]
+        when 70..99 then ["d",  "D" ]
         end
 
-      text = "あなたの#{subject}の単位は#{grade}です"
-      text += " 来年もがんばってください" if grade == "D"
+      unless Moritan::DataBase.exist?(twitter_id:twitter_id)
+        Moritan::User.entry(twitter_id)
+      end
+      user = Moritan::DataBase.new(twitter_id)
+      gpa = user.get_gpa(grade)
+      text =  "あなたの#{subject}の単位は#{grade[1]}です"
+      text += " 来年もがんばってください" if grade[1] == "D"
+      text += " [GPA:#{gpa.round(2)}]"
       return text
     end
 
     # どのキーワードにも当てはまらなかったら
-    def converse(contents)
+    def converse(contents, twitter_id)
       text = nil
       catch(:exit) do
         if contents.match(@rep_table['self'][0])

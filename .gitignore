@@ -1,4 +1,11 @@
-config.yml
 test/
+control/
+
+Rakefile
+rsync-exclude
+
 scrape.rb
 log.yml
+
+config.yml
+moritan_bot.db

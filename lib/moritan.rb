@@ -29,9 +29,9 @@ def error_logs(text, message, point)
 end
 
 module Moritan
-  # require_relative "moritan/database/user"
-  # require_relative "moritan/database/condition"
-  # require_relative "moritan/database"
+  require_relative "moritan/database/user"
+  require_relative "moritan/database/credit"
+  require_relative "moritan/database"
 
   require_relative "moritan/function/matrix"
   require_relative "moritan/function/pcnode"

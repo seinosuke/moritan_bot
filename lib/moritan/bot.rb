@@ -132,10 +132,10 @@ module Moritan
           room = PCroom.new(2..91, timeout:3, ssh:@function.ssh_config)
           "\n現在90台中#{room.count(:on)}台稼働中"
         when /(単位|たんい)/
-          @function.mark(contents)
+          @function.mark(contents, twitter_id)
 
         else # どのキーワードにも当てはまらなかったら
-          @function.converse(contents)
+          @function.converse(contents, twitter_id)
         end
       rep_text ||= @function.converse(contents)
       return rep_text
