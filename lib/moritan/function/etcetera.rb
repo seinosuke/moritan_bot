@@ -33,6 +33,19 @@ module Moritan
       return text
     end
 
+    # 現在のGPA等を返す
+    def record(twitter_id)
+      unless Moritan::DataBase.exist?(twitter_id:twitter_id)
+        Moritan::User.entry(twitter_id)
+      end
+      user = Moritan::DataBase.new(twitter_id)
+      members_num = Moritan::DataBase.last_id
+      text = "\nこれまでの履修単位数は#{user.credit.total}" +
+             "\nGPAは#{user.credit.gpa.round(2)}です" +
+             "\n[GPAランキング #{members_num}人中#{user.rank}位]"
+      return text
+    end
+
     # どのキーワードにも当てはまらなかったら
     def converse(contents, twitter_id)
       text = nil

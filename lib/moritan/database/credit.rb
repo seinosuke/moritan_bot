@@ -23,11 +23,15 @@ module Moritan
       if id
         credit = self.find_by_user_id(id)
         user = Moritan::User.find(credit.user_id)
-        puts "user_id       #{credit.user_id}"
+        puts "user_id #{credit.user_id}"
+        puts "GPA     #{credit.gpa}"
+        puts "total   #{credit.total}"
       else
         self.all.each do |c|
           user = Moritan::User.find(c.user_id)
-          puts "user_id       #{c.user_id}"
+          puts "user_id #{c.user_id}"
+          puts "GPA     #{c.gpa}"
+          puts "total   #{c.total}"
         end
       end
     rescue

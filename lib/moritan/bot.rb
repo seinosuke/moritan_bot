@@ -133,6 +133,8 @@ module Moritan
           "\n現在90台中#{room.count(:on)}台稼働中"
         when /(単位|たんい)/
           @function.mark(contents, twitter_id)
+        when /(成績|GPA)/
+          @function.record(twitter_id)
 
         else # どのキーワードにも当てはまらなかったら
           @function.converse(contents, twitter_id)

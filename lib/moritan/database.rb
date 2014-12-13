@@ -60,8 +60,7 @@ module Moritan
 
     # GPAランキング
     def rank
-      members_num = Moritan::User.last.id
-      my_rank = members_num
+      my_rank = Moritan::User.last.id
       Moritan::User.all.each do |u|
         next if @id == u.id
         my_rank -= 1 if u.credit.gpa <= @user.credit.gpa

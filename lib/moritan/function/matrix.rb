@@ -203,12 +203,12 @@ module Moritan
     def hermitian_check(mat)
       mat.column_size.times do |n|
         if mat[n,n].imag != 0
-          raise ExceptionForMatrix::ErrNotHermitian.new("not unitary")
+          raise ExceptionForMatrix::ErrNotHermitian.new("Not Hermitian Matrix")
         end
       end
       Array.new(mat.column_size){|e|e}.combination(2) do |arr|
         if mat[arr[0],arr[1]].conj != mat[arr[1],arr[0]]
-          raise ExceptionForMatrix::ErrNotHermitian.new("not unitary")
+          raise ExceptionForMatrix::ErrNotHermitian.new("Not Hermitian Matrix")
         end
       end
       return
