@@ -16,6 +16,8 @@ module Moritan
     def User::entry(twitter_id="")
       user = self.new do |u|
         u.twitter_id = twitter_id
+        u.context = ""
+        u.last_date = Time.now
       end
       user.save
 
@@ -52,10 +54,14 @@ module Moritan
         user = self.find(id)
         puts "id         #{user.id}"
         puts "twitter_id #{user.twitter_id}"
+        puts "context    #{user.context}"
+        puts "last_date  #{user.last_date}"
       else
         self.all.each do |u|
           puts "id         #{u.id}"
           puts "twitter_id #{u.twitter_id}"
+          puts "context    #{u.context}"
+          puts "last_date  #{u.last_date}"
         end
       end
     rescue

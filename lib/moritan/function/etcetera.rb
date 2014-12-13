@@ -3,6 +3,7 @@
 module Moritan
   module Etcetera
 
+    # 単位ガチャ
     def mark(contents, twitter_id)
       if contents =~ /の単位/
         subject = contents.split(/の単位/)[0]
@@ -20,6 +21,7 @@ module Moritan
         when 70..99 then ["d",  "D" ]
         end
 
+      # ユーザーが登録されていなかったら新しく作る
       unless Moritan::DataBase.exist?(twitter_id:twitter_id)
         Moritan::User.entry(twitter_id)
       end
@@ -48,28 +50,37 @@ module Moritan
         end
       end
 
-      text ||= talk(contents)
+      text ||= talk(contents, twitter_id)
       text ||= @rep_table['terms'].sample
       return text
     end
 
     module_function
 
-    def talk(contents)
-      uri = URI.parse("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{@api_key}")
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-      body = Hash['utt' => contents]
-      request = Net::HTTP::Post.new(uri.request_uri, {'Content-Type' =>'application/json'})
-      request.body = body.to_json
-      response = http.start do |h|
-        resp = h.request(request)
-        JSON.parse(resp.body)
+    # 雑談対話
+    def talk(contents, twitter_id)
+      # ユーザーが登録されていなかったら新しく作る
+      unless Moritan::DataBase.exist?(twitter_id:twitter_id)
+        Moritan::User.entry(twitter_id)
       end
+      user = Moritan::DataBase.new(twitter_id)
+
+      if user.last_date == Time.now.strftime("%Y%m%d")
+        context = user.context
+      end
+      context ||= ""
+      body = {'utt' => contents, 'context' => context}
+      request = Net::HTTP::Post.new(@uri.request_uri, {'Content-Type' =>'application/json'})
+      request.body = body.to_json
+      response = nil
+      @http.start do |h|
+        resp = h.request(request)
+        response = JSON.parse(resp.body)
+      end
+      user.context = response['context']
       return response['utt']
-    rescue JSON::ParserError
+    rescue JSON::ParserError, SocketError
+      user.context = ""
       return
     end
   end

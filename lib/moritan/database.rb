@@ -3,7 +3,9 @@
 module Moritan
   class DataBase
 
-    attr_accessor :id, :twitter_id, :credit
+    attr_accessor \
+      :id, :twitter_id, :last_date,
+      :credit
 
     def self.last_id
       return Moritan::User.last.id
@@ -24,6 +26,7 @@ module Moritan
     def initialize(twitter_id="")
       @user = Moritan::User.find_by_twitter_id(twitter_id)
       @id = @user.id
+      @last_date = @user.last_date.strftime("%Y%m%d")
       @twitter_id = twitter_id
       @credit = Moritan::Credit.find_by_user_id(@id)
     rescue
@@ -31,7 +34,16 @@ module Moritan
       return nil
     end
 
-    # userを在室状態にする
+    def context
+      @user.context
+    end
+
+    def context= (value)
+      @user.context = value
+      @user.save
+    end
+
+    # 現在までのGPAを計算して返す
     def get_gpa(grade)
       eval("@user.credit.#{grade[0]}_times += 1")
       @user.credit.total += 1

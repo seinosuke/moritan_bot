@@ -21,7 +21,12 @@ module Moritan
           port:22
         }
       }
-      @api_key = api_key
+
+      # 雑談対話API
+      @uri = URI.parse("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}")
+      @http = Net::HTTP.new(@uri.host, @uri.port)
+      @http.use_ssl = true
+      @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     end
   end
 end
