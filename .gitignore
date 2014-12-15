@@ -4,6 +4,8 @@ control/
 
 Rakefile
 rsync-exclude
+moritan.sh
+moritan_kill.sh
 
 scrape.rb
 log.yml
