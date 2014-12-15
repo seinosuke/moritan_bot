@@ -20,7 +20,6 @@ require 'json'
 require 'openssl'
 
 require_relative "moritan/function/extensions"
-# require_relative "moritan/database/helper"
 
 def error_logs(text, message, point)
   puts Time.now
@@ -33,6 +32,7 @@ module Moritan
   require_relative "moritan/database/credit"
   require_relative "moritan/database"
 
+  require_relative "moritan/function/matrix_helper"
   require_relative "moritan/function/matrix"
   require_relative "moritan/function/pcnode"
   require_relative "moritan/function/pcroom"

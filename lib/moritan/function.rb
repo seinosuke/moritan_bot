@@ -3,6 +3,7 @@
 module Moritan
   class Function
 
+    include MatrixHelper
     include Matrix
     include Etcetera
 

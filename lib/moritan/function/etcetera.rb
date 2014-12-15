@@ -63,7 +63,7 @@ module Moritan
         end
       end
 
-      text ||= talk(contents, twitter_id)
+      text ||= get_response(contents, twitter_id)
       text ||= @rep_table['terms'].sample
       return text
     end
@@ -71,7 +71,7 @@ module Moritan
     module_function
 
     # 雑談対話
-    def talk(contents, twitter_id)
+    def get_response(contents, twitter_id)
       # ユーザーが登録されていなかったら新しく作る
       unless Moritan::DataBase.exist?(twitter_id:twitter_id)
         Moritan::User.entry(twitter_id)
