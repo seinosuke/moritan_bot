@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 ruby '2.1.4'
 #ruby-gemset=moritan_bot
 
+gem 'rspec', '~> 3.1.0'
+
 gem 'twitter', '5.11.0'
 gem 'tweetstream', '2.6.1'
 gem 'activerecord', '4.0.5'

@@ -35,12 +35,12 @@ module Moritan
         if imaginary
           b        = "" if b.zero?
           root_out = "" if root_out == 1
-          return "#{b}±#{root_out}i" if denom == 1
-          return "(#{b}±#{root_out}i)/#{denom}"
+          return [["#{b}±#{root_out}i", 1]] if denom == 1
+          return [["(#{b}±#{root_out}i)/#{denom}", 1]]
         else
           ans1 = Rational(b + root_out, denom).to_integer
           ans2 = Rational(b - root_out, denom).to_integer
-          return "#{ans1}、 #{ans2}"
+          return [["#{ans1}", 1], ["#{ans2}", 1]]
         end
       end
 
@@ -48,12 +48,12 @@ module Moritan
       root_out = ""            if root_out == 1
       root_in  = "#{root_in}i" if imaginary
 
-      return "#{b}±#{root_out}√#{root_in}" if denom == 1
-      return "(#{b}±#{root_out}√#{root_in})/#{denom}"
+      return [["#{b}±#{root_out}√#{root_in}", 1]] if denom == 1
+      return [["(#{b}±#{root_out}√#{root_in})/#{denom}", 1]]
 
     # 重解
     rescue ZeroDivisionError
-      return "#{Rational(b, denom).to_integer} (重解)"
+      return [["#{Rational(b, denom).to_integer}", 2]]
     end
 
     # 3次方程式を解く
@@ -67,25 +67,31 @@ module Moritan
           cc = d / (-solution.numerator)
           bb = (solution.denominator*cc - c) / (solution.numerator)
           # puts "#{aa}λ^2 + #{bb}λ + #{cc}"
-          ans1 = solution.to_integer.to_s
-          ans2 = solve_equation2(aa, -bb, cc).gsub("\s\(重解\)","")
-          # ans2にans1が含まれてたら重解表示する感じにしたい（予定）
-          return "#{ans1} (3重解)" if ans1 == ans2
-          return "#{ans1}、 #{ans2}"
+          ans = [[solution.to_integer.to_s, 1]]
+          solve_equation2(aa, -bb, cc).each do |e|
+            if ans[0][0] == e[0]
+              ans[0][1] += e[1]
+              next
+            end
+            ans << e
+          end
+          return ans
         end
         return
 
       when [true,true,false]
-        ans = "\nω = (-1+√3i)/2" +
+        str = "\nω = (-1+√3i)/2" +
               "\nα = ∛(#{Rational(-d, a).to_integer}) としたとき" +
               "\nα、 αω、 αω^2"
-        return ans
+        return [[str, 1]]
       when [false,false,true], [true,false,true]
-        return "0、 #{solve_equation2(a, -b, c)}"
+        ans = [["0", 1]]
+        solve_equation2(a, -b, c).each{|e| ans << e}
+        return ans
       when [false,true,true]
-        return "0 (重解)、 #{-b/a}"
+        return [["0", 2], ["#{-b/a}", 1]]
       when [true,true,true]
-        return "0 (3重解)"
+        return [["0", 3]]
       else
         return
       end
