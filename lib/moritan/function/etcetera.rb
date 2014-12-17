@@ -29,7 +29,7 @@ module Moritan
       gpa = user.get_gpa(grade)
       text =  "あなたの#{subject}の単位は#{grade[1]}です"
       text += " 来年もがんばってください" if grade[1] == "D"
-      text += " [GPA:#{gpa.round(2)}]"
+      text += " [GPA: %.2f]".% gpa.round(2)
       return text
     end
 
@@ -41,7 +41,7 @@ module Moritan
       user = Moritan::DataBase.new(twitter_id)
       members_num = Moritan::DataBase.last_id
       text = "\nこれまでの履修単位数は#{user.credit.total}" +
-             "\nGPAは#{user.credit.gpa.round(2)}です" +
+             "\nGPAは%.2fです".%(user.credit.gpa.round(2)) +
              "\n[GPAランキング #{members_num}人中#{user.rank}位]"
       return text
     end
