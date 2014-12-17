@@ -7,20 +7,22 @@ module Moritan
       :id, :twitter_id, :last_date,
       :credit
 
-    def self.last_id
-      return Moritan::User.last.id
-    end
-
-    # 存在するか
-    def self.exist?(id:nil, twitter_id:nil)
-      if id
-        Moritan::User.find(id)
-        return true
-      elsif twitter_id
-        return Moritan::User.find_by_twitter_id(twitter_id) ? true : false
+    class << self
+      def last_id
+        return Moritan::User.last.id
       end
-    rescue ActiveRecord::RecordNotFound
-      return false
+
+      # 存在するか
+      def exist?(id:nil, twitter_id:nil)
+        if id
+          Moritan::User.find(id)
+          return true
+        elsif twitter_id
+          return Moritan::User.find_by_twitter_id(twitter_id) ? true : false
+        end
+      rescue ActiveRecord::RecordNotFound
+        return false
+      end
     end
 
     def initialize(twitter_id="")
