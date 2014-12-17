@@ -28,6 +28,9 @@ def error_logs(text, message, point)
 end
 
 module Moritan
+
+  class ExceptionForMatrix::ErrNotHermitian < StandardError; end
+
   require_relative "moritan/database/user"
   require_relative "moritan/database/credit"
   require_relative "moritan/database"

@@ -1,7 +1,5 @@
 # coding: utf-8
 
-class ExceptionForMatrix::ErrNotHermitian < StandardError; end
-
 module Moritan
   module Matrix
     def cal_etc(text)

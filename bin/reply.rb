@@ -11,7 +11,6 @@ end
 
 moritanbot = Moritan::Bot.new(debug:debug, mention:true)
 
-system("clear")
 puts "debug mode" if debug
 puts "ready!"
 
@@ -48,6 +47,6 @@ rescue Interrupt
   exit 1
 rescue
   error_logs("reply", $!, $@)
-  sleep 300
+  sleep 30
   retry
 end
