@@ -57,7 +57,7 @@ module Moritan
       return gpa
     rescue
       error_logs("entrance", $!, $@)
-    rescue 0.0
+      return 0.0
     end
 
     # GPAランキング

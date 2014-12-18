@@ -7,7 +7,7 @@ module Moritan
     def mark(contents, twitter_id)
       if contents =~ /の単位/
         subject = contents.split(/の単位/)[0]
-        if subject.size > 11 || subject.empty?
+        if subject.size > 20 || subject.empty?
           subject = "線形代数"
         end
       end
