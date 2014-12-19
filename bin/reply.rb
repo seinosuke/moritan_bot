@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 # coding: utf-8
 
-require "../lib/moritan"
+$:.unshift File.join(Dir.home, '/bot/moritan_bot/lib/')
+require 'moritan'
 
 debug = false
 OptionParser.new do |opt|

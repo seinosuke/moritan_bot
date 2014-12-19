@@ -2,7 +2,7 @@
 
 ActiveRecord::Base.establish_connection(
   "adapter" => "sqlite3",
-  "database" => "../lib/moritan/database/moritan_bot.db"
+  "database" => Moritan::DB_FILE
 )
 
 module Moritan

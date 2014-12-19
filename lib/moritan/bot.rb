@@ -9,7 +9,7 @@ module Moritan
       :client, :timeline
 
     def initialize(debug:false, mention:false)
-      @config = YAML.load_file('./config.yml')
+      @config = YAML.load_file(Moritan::CONF_FILE)
 
       @function = Moritan::Function.new(@config['ReplayTable'], @config['ssh'], @config['api_key'])
       @name = debug ? @config['name_debug'] : @config['name']
