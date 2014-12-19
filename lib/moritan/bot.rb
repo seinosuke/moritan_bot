@@ -139,7 +139,7 @@ module Moritan
         else # どのキーワードにも当てはまらなかったら
           @function.converse(contents, twitter_id)
         end
-      rep_text ||= @function.converse(contents)
+      rep_text ||= @function.converse(contents, twitter_id)
       return rep_text
 
     rescue

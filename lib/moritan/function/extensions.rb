@@ -23,7 +23,7 @@ end
 
 # 例えば(3+0i)を3にする(後でちゃんと書き直すかも)
 class Complex
-  def visualize
+  def to_str
     return "0" if self.real == 0 && self.imag == 0
     return "#{self.image.to_r.to_integer}i" if self.real == 0
     return "#{self.real.to_r.to_integer}" if self.imag == 0

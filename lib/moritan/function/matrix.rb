@@ -4,31 +4,29 @@ module Moritan
   module Matrix
     def cal_etc(text)
       func_name = text.split("\n")[0]
-      ans = "#{func_name} "
 
-      case func_name
-      when /^階数$/
-        text.sub!(/#{func_name}.?/m, "")
-        ans += text.to_mat.rank.to_s
+      ans = case func_name
+        when /^階数$/
+          text.sub!(/#{func_name}.?/m, "")
+          text.to_mat.rank.to_s
 
-      when /^逆行列$/
-        text.sub!(/#{func_name}.?/m, "")
-        mat = text.to_mat.inverse
-        mat.row_size.times do |i|
-          row = "\n"
-          mat.row(i).each{|e| row += "#{e.visualize}, "}
-          row.gsub!(/, $/,"")
-          ans += row
+        when /^逆行列$/
+          text.sub!(/#{func_name}.?/m, "")
+          mat = text.to_mat.inverse
+          mat.row_size.times.map do |i|
+            row = "\n"
+            mat.row(i).each{|e| row += "#{e.to_str}, "}
+            row.gsub!(/, $/,"")
+          end.join
+
+        when /^行列式$/
+          text.sub!(/#{func_name}.?/m, "")
+          text.to_mat.determinant.to_str
+
+        else
+          @warning_message
         end
 
-      when /^行列式$/
-        text.sub!(/#{func_name}.?/m, "")
-        det = text.to_mat.determinant.visualize
-        ans += "#{det}"
-
-      else 
-        ans = @warning_message
-      end
       return ans
 
     rescue NoMethodError
@@ -38,7 +36,7 @@ module Moritan
     rescue ExceptionForMatrix::ErrNotRegular
       return "正則行列じゃないです"
     rescue
-      error_logs("cal_mat", $!, $@)
+      error_logs("cal_etc", $!, $@)
     end
 
     def cal_eigen(text)
@@ -98,7 +96,7 @@ module Moritan
           e_mat.column_size.times.map{|i| "\n#{e_mat[i, i]}"}.join
         end
 
-      return "#{func_name} #{ans}"
+      return ans
 
     rescue NoMethodError
       return @warning_message
