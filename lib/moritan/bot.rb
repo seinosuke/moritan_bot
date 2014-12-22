@@ -119,7 +119,7 @@ module Moritan
     end
 
     # メンションに反応
-    def generate_reply(contents, twitter_id)
+    def generate_reply(contents, twitter_id, reply_id)
       contents = contents.gsub(/@\w*/,"")
       contents = contents.gsub(/ |　|\t/,"")
       rep_text = case contents
