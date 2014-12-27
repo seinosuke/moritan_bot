@@ -31,9 +31,9 @@ module Moritan
 
   class ExceptionForMatrix::ErrNotHermitian < StandardError; end
 
-  BASE_DIR  = File.join(Dir.home, '/bot/moritan_bot/bin/')
-  CONF_FILE = File.join(Moritan::BASE_DIR, 'config.yml')
-  DB_FILE   = File.join(Moritan::BASE_DIR, 'moritan_bot.db')
+  BASE_DIR  = File.join(Dir.home, '/bot/moritan_bot/')
+  CONF_FILE = File.join(Moritan::BASE_DIR, 'bin/config.yml')
+  DB_FILE   = File.join(Moritan::BASE_DIR, 'bin/moritan_bot.db')
 
   require_relative "moritan/database/user"
   require_relative "moritan/database/credit"

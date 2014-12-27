@@ -20,8 +20,11 @@ module Clockwork
     when 'tweet'
       text = $moritanbot.config['ReplayTable']['terms'].sample
       $moritanbot.post(text)
+    when 'backup'
+      puts `ruby #{Moritan::BASE_DIR}/control/export.rb`
     end
   end
 
   every(1.hour, 'tweet', :at => $times)
+  every(1.day, 'backup', :at => '05:00')
 end

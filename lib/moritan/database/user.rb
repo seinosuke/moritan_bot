@@ -15,7 +15,7 @@ module Moritan
     class << self
 
       # 新規登録
-      def entry(twitter_id="")
+      def entry(twitter_id="", credit:Hash.new)
         user = self.new do |u|
           u.twitter_id = twitter_id
           u.context = ""
@@ -24,17 +24,17 @@ module Moritan
         user.save
 
         # first_or_createをしなくてよくなる
-        credit = Moritan::Credit.new do |c|
+        user_credit = Moritan::Credit.new do |c|
           c.user_id = user.id
-          c.aa_times = 0
-          c.a_times  = 0
-          c.b_times  = 0
-          c.c_times  = 0
-          c.d_times  = 0
-          c.gpa      = 0.00
-          c.total    = 0
+          c.aa_times = credit['aa_times'] || 0
+          c.a_times  = credit['a_times'] || 0
+          c.b_times  = credit['b_times'] || 0
+          c.c_times  = credit['c_times'] || 0
+          c.d_times  = credit['d_times'] || 0
+          c.gpa      = credit['gpa'] || 0.0
+          c.total    = credit['total'] || 0
         end
-        credit.save
+        user_credit.save
       end
 
       # 情報の削除（id指定無しで全員）
