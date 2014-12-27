@@ -104,7 +104,7 @@ module Moritan
     def generate_response(contents, status_id, moritanbot)
       res_text = nil
       contents = contents.gsub(/@\w*/,"")
-      contents = contents.gsub(/(\s|　)/,"")
+      contents = contents.gsub(/(\s|\p{blank})/,"")
       case contents
       when @function.rep_table['self'][0]
         moritanbot.fav(status_id)
@@ -121,7 +121,7 @@ module Moritan
     # メンションに反応
     def generate_reply(contents, twitter_id, reply_id)
       contents = contents.gsub(/@\w*/,"")
-      contents = contents.gsub(/ |　|\t/,"")
+      contents = contents.gsub(/ |\p{blank}|\t/,"")
       rep_text = case contents
         when /^(固有値)/
           @function.cal_eigen(contents)

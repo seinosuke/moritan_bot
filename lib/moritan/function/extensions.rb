@@ -43,7 +43,7 @@ class Integer
     num ||= self
     return [1] if num == 1
     Prime.prime_division(num).map do |e|
-      Array.new(e[1]+1).map.with_index{|element, i| e[0]**i}
+      Array.new(e[1]+1).map.with_index{|_, i| e[0]**i}
     end.inject{|p,q| p.product(q)}.map do |a|
       [a].flatten.inject(&:*)
     end.sort

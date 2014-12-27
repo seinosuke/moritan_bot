@@ -12,8 +12,11 @@ module Moritan
     def initialize(table, ssh, api_key)
       @rep_table = table
       site_url = "https://sites.google.com/site/moritanbot/home"
-      @warning_message = "\nフォーマットが違います\n" +
-                         "使い方はこちらを参照してください\n#{site_url}"
+      @warning_message = <<-EOS.gsub(/ {6}/,"")
+      \nフォーマットが違います
+      使い方はこちらを参照してください
+      #{site_url}
+      EOS
       @random = Random.new(Time.new.to_i)
       @ssh_config={
         username:ssh['username'],
@@ -24,7 +27,8 @@ module Moritan
       }
 
       # 雑談対話API
-      @uri = URI.parse("https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}")
+      api_url = "https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}"
+      @uri = URI.parse(api_url)
       @http = Net::HTTP.new(@uri.host, @uri.port)
       @http.use_ssl = true
       @http.verify_mode = OpenSSL::SSL::VERIFY_NONE

@@ -40,9 +40,11 @@ module Moritan
       end
       user = Moritan::DataBase.new(twitter_id)
       members_num = Moritan::DataBase.last_id
-      text = "\nこれまでの履修単位数は#{user.credit.total}" +
-             "\nGPAは%.2fです".%(user.credit.gpa.round(2)) +
-             "\n[GPAランキング #{members_num}人中#{user.rank}位]"
+      text = <<-EOS.gsub(/ {6}/,"").%(user.credit.gpa.round(2))
+      \n合計履修単位数 #{user.credit.total}単位
+      GPAランキング #{members_num}人中#{user.rank}位
+      [GPA: %.2f]
+      EOS
       return text
     end
 

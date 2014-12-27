@@ -80,10 +80,12 @@ module Moritan
         return
 
       when [true,true,false]
-        str = "\nω = (-1+√3i)/2" +
-              "\nα = ∛(#{Rational(-d, a).to_integer}) としたとき" +
-              "\nα、 αω、 αω^2"
-        return [[str, 1]]
+        ans_str = <<-EOS.gsub(/ {8}/,"")
+        \nω = (-1+√3i)/2
+        α = ∛(#{Rational(-d, a).to_integer}) としたとき
+        α、 αω、 αω^2
+        EOS
+        return [[ans_str, 1]]
       when [false,false,true], [true,false,true]
         ans = [["0", 1]]
         solve_equation2(a, -b, c).each{|e| ans << e}
