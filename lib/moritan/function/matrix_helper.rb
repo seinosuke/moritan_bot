@@ -112,7 +112,7 @@ module Moritan
     end
 
     # エルミート行列であるか調べる
-    def hermitian_check(mat)
+    def check_hermitian(mat)
       mat.column_size.times do |n|
         if mat[n,n].imag != 0
           raise ExceptionForMatrix::ErrNotHermitian.new("Not Hermitian Matrix")

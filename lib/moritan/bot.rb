@@ -11,7 +11,8 @@ module Moritan
     def initialize(debug:false, mention:false)
       @config = YAML.load_file(Moritan::CONF_FILE)
 
-      @function = Moritan::Function.new(@config['ReplayTable'], @config['ssh'], @config['api_key'])
+      @ssh_config = @config['ssh']
+      @function = Moritan::Function.new(@config['ReplayTable'], @config['api_key'])
       @name = debug ? @config['name_debug'] : @config['name']
 
       oauth = debug ? 'oauth_debug' : 'oauth'
@@ -45,14 +46,18 @@ module Moritan
       # 会話の返事
       if status_id
         rep_text = "@#{twitter_id} #{text}"
-        rep_text = self.chain_post(text,twitter_id:twitter_id,status_id:status_id) if rep_text.size > 140
+        if rep_text.size > 140
+          rep_text = self.chain_post(text,twitter_id:twitter_id,status_id:status_id)
+        end
         @client.update(rep_text,{:in_reply_to_status_id => status_id})
         puts "#{rep_text}\n\n"
 
       # ただの投稿(twitter_id:nil)か会話の始まり
       else
         post_text = twitter_id ? "@#{twitter_id} #{text}" : text
-        post_text = self.chain_post(text,twitter_id:twitter_id,status_id:status_id) if post_text.size > 140
+        if post_text.size > 140
+          post_text = self.chain_post(text,twitter_id:twitter_id,status_id:status_id)
+        end
         @client.update(post_text)
         puts "#{post_text}\n\n"
       end
@@ -123,23 +128,19 @@ module Moritan
       contents = contents.gsub(/@\w*/,"")
       contents = contents.gsub(/ |\p{blank}|\t/,"")
       rep_text = case contents
-        when /^(固有値)/
-          @function.cal_eigen(contents)
-        when /^(階数|逆行列|行列式)/
-          @function.cal_etc(contents)
+        when /^(階数)/   then @function.get_rank_str(contents)
+        when /^(逆行列)/ then @function.get_invmat_str(contents)
+        when /^(行列式)/ then @function.get_det_str(contents)
+        when /^(固有値)/ then @function.get_eigen_str(contents)
 
-        when /(計算機室|機室|きしつ)/
-          room = PCroom.new(2..91, timeout:3, ssh:@function.ssh_config)
-          "\n現在90台中#{room.count(:on)}台稼働中"
-        when /(単位|たんい)/
-          @function.mark(contents, twitter_id)
-        when /(成績|GPA)/
-          @function.record(twitter_id)
+        when /(計算機室|機室|きしつ)/ then @function.get_ping_result(@ssh_config)
+        when /(単位|たんい)/ then @function.get_gacha_result(contents, twitter_id)
+        when /(成績|GPA)/ then @function.get_record_text(twitter_id)
 
         else # どのキーワードにも当てはまらなかったら
-          @function.converse(contents, twitter_id)
+          @function.get_response_text(contents, twitter_id)
         end
-      rep_text ||= @function.converse(contents, twitter_id)
+      rep_text ||= @function.get_response_text(contents, twitter_id)
       return rep_text
 
     rescue

@@ -3,28 +3,23 @@
 module Moritan
   class Function
 
-    include MatrixHelper
-    include Matrix
-    include Etcetera
+    include Moritan::Matrix
+    include Moritan::Etcetera
 
-    attr_accessor :rep_table, :ssh_config
+    attr_accessor :rep_table
 
-    def initialize(table, ssh, api_key)
-      @rep_table = table
-      site_url = "https://sites.google.com/site/moritanbot/home"
-      @warning_message = <<-EOS.gsub(/ {6}/,"")
+    NOT_HERMITIAN_ERRMSG = 
+      "成分に虚数を含む行列の固有値計算はエルミート行列のみ対応しています"
+
+    INVALID_FORMAT_ERRMSG = <<-EOS.gsub(/ {6}/,"")
       \nフォーマットが違います
       使い方はこちらを参照してください
-      #{site_url}
+      https://sites.google.com/site/moritanbot/home
       EOS
+
+    def initialize(table, api_key)
+      @rep_table = table
       @random = Random.new(Time.new.to_i)
-      @ssh_config={
-        username:ssh['username'],
-        opt:{
-          password:ssh['password'],
-          port:22
-        }
-      }
 
       # 雑談対話API
       api_url = "https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}"
@@ -32,6 +27,11 @@ module Moritan
       @http = Net::HTTP.new(@uri.host, @uri.port)
       @http.use_ssl = true
       @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    end
+
+    def get_ping_result(ssh_config)
+      room = Moritan::PCroom.new(2..91, timeout:3, ssh:ssh_config)
+      "\n現在90台中#{room.count(:on)}台稼働中"
     end
   end
 end

@@ -14,8 +14,10 @@ oauth_debug:
   oauth_token_secret: 
 
 ssh:
-  username: 
-  password: 
+  :username: 
+  :opt:
+    :password: 
+    :port: 22
 
 api_key: 
 
