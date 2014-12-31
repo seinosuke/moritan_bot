@@ -15,14 +15,16 @@
 module Moritan
   module Matrix
 
+    # 階数
     def get_rank_str(text)
       Moritan::Matrix.rank(text).to_s
     rescue NoMethodError
       return Moritan::Function::INVALID_FORMAT_ERRMSG
     rescue ExceptionForMatrix::ErrDimensionMismatch
-      return "正方行列じゃないです"
+      return "行列の形が不正です"
     end
 
+    # 逆行列
     def get_invmat_str(text)
       mat = Moritan::Matrix.inverse(text)
       mat.row_size.times.map do |i|
@@ -38,6 +40,7 @@ module Moritan
       return "正則行列じゃないです"
     end
 
+    # 行列式
     def get_det_str(text)
       Moritan::Matrix.determinant(text).to_str
     rescue NoMethodError
@@ -46,6 +49,7 @@ module Moritan
       return "正方行列じゃないです"
     end
 
+    # 固有値
     def get_eigen_str(text)
       Moritan::Matrix.eigen(text).map do |e|
         case e[1]
@@ -54,7 +58,6 @@ module Moritan
         when 3 then "#{e[0]} (3重解)"
         end
       end.join.sub(/、\s$/,"")
-
     rescue NoMethodError
       return Moritan::Function::INVALID_FORMAT_ERRMSG
     rescue ExceptionForMatrix::ErrNotHermitian
@@ -65,7 +68,7 @@ module Moritan
 
     module_function
 
-    # 数値を返す
+    # 階数 数値を返す
     def rank(text)
       func_name = text.split("\n")[0]
       raise NoMethodError unless func_name =~ /^階数$/
@@ -73,7 +76,7 @@ module Moritan
       text.to_mat.rank
     end
 
-    # Matrixクラスのオブジェクトを返す
+    # 逆行列 Matrixクラスのオブジェクトを返す
     def inverse(text)
       func_name = text.split("\n")[0]
       raise NoMethodError unless func_name =~ /^逆行列$/
@@ -81,7 +84,7 @@ module Moritan
       text.to_mat.inverse
     end
 
-    # 数値を返す
+    # 行列式 数値を返す
     def determinant(text)
       func_name = text.split("\n")[0]
       raise NoMethodError unless func_name =~ /^行列式$/
@@ -89,7 +92,7 @@ module Moritan
       text.to_mat.determinant
     end
 
-    # [["解", 重複度], ["解", 重複度], …]という配列を返す
+    # 固有値 [["解", 重複度], ["解", 重複度], …]という配列を返す
     def eigen(text)
       func_name = text.split("\n")[0]
       raise NoMethodError unless func_name =~ /^固有値$/

@@ -61,9 +61,11 @@ class Array
     self.inject{|a,b| a.lcm(b)}
   end
 
+  #
   # 要素数1の配列を渡すと全て[1]になる
   # 要素が全て0の配列を渡すとnilを返す
   # 要素に0が含まれていてもそれ以外の要素同士で作用する
+  #
   def abbrev
     gcd = self.gcd
     self.map{|e| e/=gcd}

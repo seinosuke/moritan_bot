@@ -1,6 +1,5 @@
 test/
 logs/
-spec/
 control/
 
 Rakefile
