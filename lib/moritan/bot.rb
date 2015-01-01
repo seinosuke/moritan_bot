@@ -3,7 +3,7 @@
 module Moritan
   class Bot
 
-    attr_accessor \
+    attr_reader \
       :config,
       :function, :name,
       :client, :timeline
@@ -49,7 +49,7 @@ module Moritan
         if rep_text.size > 140
           rep_text = self.chain_post(text,twitter_id:twitter_id,status_id:status_id)
         end
-        @client.update(rep_text,{:in_reply_to_status_id => status_id})
+        self.client.update(rep_text,{:in_reply_to_status_id => status_id})
         puts "#{rep_text}\n\n"
 
       # ただの投稿(twitter_id:nil)か会話の始まり
@@ -58,7 +58,7 @@ module Moritan
         if post_text.size > 140
           post_text = self.chain_post(text,twitter_id:twitter_id,status_id:status_id)
         end
-        @client.update(post_text)
+        self.client.update(post_text)
         puts "#{post_text}\n\n"
       end
 
@@ -83,7 +83,7 @@ module Moritan
       begin
         0.upto(texts.size - 2) do |i|
           texts[i] = twitter_id ? "@#{twitter_id} #{texts[i]}(続く)" : "#{texts[i]}(続く)"
-          @client.update(texts[i],{:in_reply_to_status_id => status_id})
+          self.client.update(texts[i],{:in_reply_to_status_id => status_id})
           puts "#{texts[i]}\n\n"
         end
       rescue Twitter::Error
@@ -97,9 +97,9 @@ module Moritan
     end
 
     # ふぁぼる
-    def fav(status_id)
+    def fav(status_id = nil)
       if status_id
-        @client.favorite(status_id)
+        self.client.favorite(status_id)
       end
     rescue
       error_logs("fav")
