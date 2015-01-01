@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 # coding: utf-8
 
 $:.unshift File.join(Dir.home, '/bot/moritan_bot/lib/')

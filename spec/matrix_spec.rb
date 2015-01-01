@@ -1,13 +1,40 @@
-#!/usr/bin/env ruby
 # coding: utf-8
 
 $:.unshift File.join(Dir.home, '/bot/moritan_bot/lib/')
 require 'moritan'
 
 describe Moritan::Matrix do
+  let(:text) { "#{func_name}\n#{matrix_str}" }
 
-  let(:text) { "#{func_name}\n#{matrix_str}" } 
+  shared_examples 'raise ErrDimensionMismatch' do
+    it { expect { is_expected }.to raise_error(ExceptionForMatrix::ErrDimensionMismatch) }
+  end
 
+  shared_examples 'raise ErrNotRegular' do
+    it { expect { is_expected }.to raise_error(ExceptionForMatrix::ErrNotRegular) }
+  end
+
+  shared_context '正方行列でない行列' do
+    let(:matrix_str) do
+      <<-EOM.gsub(/ {6}/,"")
+      1, 2, 3
+      4, 5, 6
+      EOM
+    end
+  end
+
+  shared_context '正則でない行列' do
+    let(:matrix_str) do
+      <<-EOM.gsub(/ {6}/,"")
+      1, 1
+      0, 0
+      EOM
+    end
+  end
+
+  #
+  # 階数
+  #
   describe '::rank' do
     let(:func_name) { '階数' }
     subject { Moritan::Matrix.rank(text) }
@@ -23,12 +50,7 @@ describe Moritan::Matrix do
     end
 
     context '2次正方行列で正則でない場合' do
-      let(:matrix_str) do
-        <<-EOM.gsub(/ {8}/,"")
-        1, 1
-        0, 0
-        EOM
-      end
+      include_context '正則でない行列'
       it { is_expected.to eq 1 }
     end
 
@@ -49,14 +71,13 @@ describe Moritan::Matrix do
         4, 5, 6, 7
         EOM
       end
-      it {
-        expect do 
-          Moritan::Matrix.rank(text)
-        end.to raise_error(ExceptionForMatrix::ErrDimensionMismatch)
-      }
+      it_behaves_like 'raise ErrDimensionMismatch'
     end
   end # ::rank
 
+  #
+  # 逆行列
+  #
   describe '::inverse' do
     let(:func_name) { '逆行列' }
     subject { Moritan::Matrix.inverse(text) }
@@ -73,34 +94,19 @@ describe Moritan::Matrix do
     end
 
     context '正方行列でない場合' do
-      let(:matrix_str) do
-        <<-EOM.gsub(/ {8}/,"")
-        1, 2, 3
-        4, 5, 6
-        EOM
-      end
-      it {
-        expect do 
-          Moritan::Matrix.inverse(text)
-        end.to raise_error(ExceptionForMatrix::ErrDimensionMismatch)
-      }
+      include_context '正方行列でない行列'
+      it_behaves_like 'raise ErrDimensionMismatch'
     end
 
     context '正則行列でない場合' do
-      let(:matrix_str) do
-        <<-EOM.gsub(/ {8}/,"")
-        1, 1
-        0, 0
-        EOM
-      end
-      it {
-        expect do 
-          Moritan::Matrix.inverse(text)
-        end.to raise_error(ExceptionForMatrix::ErrNotRegular)
-      }
+      include_context '正則でない行列'
+      it_behaves_like 'raise ErrNotRegular'
     end
   end # ::inverse
 
+  #
+  # 行列式
+  #
   describe '::determinant' do
     let(:func_name) { '行列式' }
     subject { Moritan::Matrix.determinant(text) }
@@ -116,30 +122,19 @@ describe Moritan::Matrix do
     end
 
     context '正則行列でない場合' do
-      let(:matrix_str) do
-        <<-EOM.gsub(/ {8}/,"")
-        1, 1
-        0, 0
-        EOM
-      end
+      include_context '正則でない行列'
       it { is_expected.to eq 0 }
     end
 
     context '正方行列でない場合' do
-      let(:matrix_str) do
-        <<-EOM.gsub(/ {8}/,"")
-        1, 2, 3
-        4, 5, 6
-        EOM
-      end
-      it {
-        expect do 
-          Moritan::Matrix.determinant(text)
-        end.to raise_error(ExceptionForMatrix::ErrDimensionMismatch)
-      }
+      include_context '正方行列でない行列'
+      it_behaves_like 'raise ErrDimensionMismatch'
     end
   end # ::determinant
 
+  #
+  # 固有値
+  #
   describe '::eigen' do
     let(:func_name) { '固有値' }
     subject { Moritan::Matrix.eigen(text) }
@@ -307,11 +302,7 @@ describe Moritan::Matrix do
         1-2i, 1-2i, 3
         EOM
       end
-      it {
-        expect do 
-          Moritan::Matrix.eigen(text)
-        end.to raise_error(NoMethodError)
-      }
+      it { expect { is_expected }.to raise_error(NoMethodError) }
     end
 
     context '成分に虚数を含む行列でエルミート行列でない場合' do
@@ -321,25 +312,12 @@ describe Moritan::Matrix do
         0, 1
         EOM
       end
-      it {
-        expect do 
-          Moritan::Matrix.eigen(text)
-        end.to raise_error(ExceptionForMatrix::ErrNotHermitian)
-      }
+      it { expect { is_expected }.to raise_error(ExceptionForMatrix::ErrNotHermitian) }
     end
 
     context '正方行列でない場合' do
-      let(:matrix_str) do
-        <<-EOM.gsub(/ {8}/,"")
-        1, 2, 3
-        4, 5, 6
-        EOM
-      end
-      it {
-        expect do 
-          Moritan::Matrix.eigen(text)
-        end.to raise_error(ExceptionForMatrix::ErrDimensionMismatch)
-      }
+      include_context '正方行列でない行列'
+      it_behaves_like 'raise ErrDimensionMismatch'
     end
   end # ::eigen
 end
