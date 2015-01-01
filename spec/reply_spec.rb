@@ -11,15 +11,58 @@ describe Moritan::Bot do
     @reply_id = 334
   end
 
-  context '行列計算(階数の例)' do
-    it do
-      contents = <<-EOS.gsub(/ {4}/,"")
-      @#{@moritanbot.name} 階数
-      1, 0
-      0, 1
-      EOS
-      rep_text = @moritanbot.generate_reply(contents, @twitter_id, @reply_id)
-      expect(rep_text).to eq "2"
+  subject do
+    @moritanbot.generate_reply(contents, @twitter_id, @reply_id)
+  end
+
+  describe '#generate_reply' do
+    context '行列計算(階数の例)' do
+      let(:contents) do
+        <<-EOS
+        @#{@moritanbot.name} 階数
+        1, 0
+        0, 1
+        EOS
+      end
+      it { is_expected.to eq "2" }
+    end
+
+    # 行列の形になって返ってきているか確認
+    context '行列計算(逆行列の例)' do
+      let(:contents) do
+        <<-EOS
+        @#{@moritanbot.name} 逆行列
+        1, 0
+        0, 1
+        EOS
+      end
+      it { is_expected.to eq "\n1, 0\n0, 1" }
+    end
+
+    # (重解) がつくか確認
+    context '行列計算(固有値の例1)' do
+      let(:contents) do
+        <<-EOS
+        @#{@moritanbot.name} 固有値
+        1, 0, 0
+        0, 1, 0
+        0, 0, 2
+        EOS
+      end
+      it { is_expected.to eq "1 (重解)、 2" }
+    end
+
+    # (3重解) がつくか確認
+    context '行列計算(固有値の例2)' do
+      let(:contents) do
+        <<-EOS
+        @#{@moritanbot.name} 固有値
+        1, 0, 0
+        0, 1, 0
+        0, 0, 1
+        EOS
+      end
+      it { is_expected.to eq "1 (3重解)" }
     end
   end
 end
