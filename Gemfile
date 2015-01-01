@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.1.4'
+ruby '2.1.2'
 #ruby-gemset=moritan_bot
 
 gem 'rspec', '~> 3.1.0'

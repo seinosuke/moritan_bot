@@ -21,9 +21,9 @@ require 'openssl'
 
 require_relative "moritan/function/extensions"
 
-def error_logs(text, message, point)
+def error_logs(text = "")
   puts Time.now
-  puts "#{text} error! #{message.class}: #{message}\n#{point[0]}"
+  puts "#{text} error! #{$!.class}: #{$!}\n#{$@[0]}"
   puts ""
 end
 

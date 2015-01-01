@@ -65,7 +65,7 @@ module Moritan
     # Twitter::Error::RequestTimeout: exection expired
     rescue Twitter::Error
       try += 1
-      error_logs("#{try}回目のpost", $!, $@)
+      error_logs("#{try}回目のpost")
       sleep 1
       retry if try < 3
     end
@@ -88,7 +88,7 @@ module Moritan
         end
       rescue Twitter::Error
         try += 1
-        error_logs("#{try}回目のchain_post", $!, $@)
+        error_logs("#{try}回目のchain_post")
         sleep 1
         retry if try < 3
       end
@@ -102,7 +102,7 @@ module Moritan
         @client.favorite(status_id)
       end
     rescue
-      error_logs("fav", $!, $@)
+      error_logs("fav")
     end
 
     # メンションじゃない投稿に反応
@@ -120,7 +120,7 @@ module Moritan
       return res_text
 
     rescue
-      error_logs("generate_response", $!, $@)
+      error_logs("generate_response")
     end
 
     # メンションに反応
@@ -144,7 +144,7 @@ module Moritan
       return rep_text
 
     rescue
-      error_logs("generate_reply", $!, $@)
+      error_logs("generate_reply")
     end
   end
 end

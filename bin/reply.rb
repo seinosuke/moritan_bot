@@ -52,7 +52,7 @@ begin
 rescue Interrupt
   exit 1
 rescue
-  error_logs("reply", $!, $@)
+  error_logs("reply")
   sleep 30
   retry
 end

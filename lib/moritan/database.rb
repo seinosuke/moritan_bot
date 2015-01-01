@@ -32,7 +32,7 @@ module Moritan
       @twitter_id = twitter_id
       @credit = Moritan::Credit.find_by_user_id(@id)
     rescue
-      error_logs("database initialize", $!, $@)
+      error_logs("database initialize")
       return nil
     end
 
@@ -56,7 +56,7 @@ module Moritan
       @user.credit.save
       return gpa
     rescue
-      error_logs("entrance", $!, $@)
+      error_logs("entrance")
       return 0.0
     end
 

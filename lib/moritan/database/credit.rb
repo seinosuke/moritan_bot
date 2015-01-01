@@ -17,7 +17,7 @@ module Moritan
           self.delete_all
         end
       rescue
-        error_logs("clear", $!, $@)
+        error_logs("clear")
       end
 
       # userの状態一覧を表示（id指定無しで全員表示）
@@ -37,7 +37,7 @@ module Moritan
           end
         end
       rescue
-        error_logs("show_contents", $!, $@)
+        error_logs("show_contents")
       end
     end
   end

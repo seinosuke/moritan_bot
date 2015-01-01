@@ -30,7 +30,7 @@ module Moritan
       end
       return true
     rescue
-      error_logs("esysPinger", $!, $@)
+      error_logs("esysPinger")
     end
 
     def linux?
