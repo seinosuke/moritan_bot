@@ -15,4 +15,7 @@ require File.expand_path(Dir.home + '/bot/moritan_bot/spec/factories/credits')
 
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
+  config.before(:all) do
+    FactoryGirl.reload
+  end
 end
