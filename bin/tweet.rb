@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby
 # coding: utf-8
 
-$:.unshift File.join(Dir.home, '/bot/moritan_bot/lib/')
-require 'moritan'
+require File.expand_path(Dir.home + '/bot/moritan_bot/lib/moritan')
 
 debug = false
 OptionParser.new do |opt|

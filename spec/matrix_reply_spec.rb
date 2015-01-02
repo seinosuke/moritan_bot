@@ -1,9 +1,8 @@
 # coding: utf-8
 
-$:.unshift File.join(Dir.home, '/bot/moritan_bot/lib/')
-require 'moritan'
+require File.expand_path(Dir.home + '/bot/moritan_bot/spec/spec_helper')
 
-describe Moritan::Bot do
+describe 'Moritan::Bot#generate_reply' do
 
   before do
     @moritanbot = Moritan::Bot.new(debug:true, mention:true)
@@ -15,8 +14,8 @@ describe Moritan::Bot do
     @moritanbot.generate_reply(contents, @twitter_id, @reply_id)
   end
 
-  describe '#generate_reply' do
-    context '行列計算(階数の例)' do
+  describe '行列計算機能' do
+    context '階数の場合' do
       let(:contents) do
         <<-EOS
         @#{@moritanbot.name} 階数
@@ -28,7 +27,7 @@ describe Moritan::Bot do
     end
 
     # 行列の形になって返ってきているか確認
-    context '行列計算(逆行列の例)' do
+    context '逆行列の場合' do
       let(:contents) do
         <<-EOS
         @#{@moritanbot.name} 逆行列
@@ -40,7 +39,7 @@ describe Moritan::Bot do
     end
 
     # (重解) がつくか確認
-    context '行列計算(固有値の例1)' do
+    context '固有値の場合1' do
       let(:contents) do
         <<-EOS
         @#{@moritanbot.name} 固有値
@@ -53,7 +52,7 @@ describe Moritan::Bot do
     end
 
     # (3重解) がつくか確認
-    context '行列計算(固有値の例2)' do
+    context '固有値の場合2' do
       let(:contents) do
         <<-EOS
         @#{@moritanbot.name} 固有値

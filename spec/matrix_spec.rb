@@ -1,7 +1,6 @@
 # coding: utf-8
 
-$:.unshift File.join(Dir.home, '/bot/moritan_bot/lib/')
-require 'moritan'
+require File.expand_path(Dir.home + '/bot/moritan_bot/spec/spec_helper')
 
 describe Moritan::Matrix do
   let(:text) { "#{func_name}\n#{matrix_str}" }

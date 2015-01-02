@@ -2,7 +2,10 @@ source 'https://rubygems.org'
 ruby '2.1.4'
 #ruby-gemset=moritan_bot
 
-gem 'rspec', '~> 3.1.0'
+group :test do
+  gem 'rspec', '~> 3.1.0'
+  gem 'factory_girl', '~> 4.5.0'
+end
 
 gem 'twitter', '5.11.0'
 gem 'tweetstream', '2.6.1'
