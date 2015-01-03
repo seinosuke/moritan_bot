@@ -2,6 +2,7 @@
 
 require File.expand_path(Dir.home + '/bot/moritan_bot/lib/moritan')
 require 'factory_girl'
+# require File.expand_path(Dir.home + '/bot/moritan_bot/test/my_formatter')
 
 ActiveRecord::Base.establish_connection(
   "adapter" => "sqlite3",
@@ -18,4 +19,5 @@ RSpec.configure do |config|
   config.before(:all) do
     FactoryGirl.reload
   end
+  # config.add_formatter(MyFormatter)
 end

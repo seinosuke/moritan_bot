@@ -50,7 +50,7 @@ module Moritan
           rep_text = self.chain_post(text,twitter_id:twitter_id,status_id:status_id)
         end
         self.client.update(rep_text,{:in_reply_to_status_id => status_id})
-        puts "#{rep_text}\n\n"
+        puts rep_text
 
       # ただの投稿(twitter_id:nil)か会話の始まり
       else
@@ -59,7 +59,7 @@ module Moritan
           post_text = self.chain_post(text,twitter_id:twitter_id,status_id:status_id)
         end
         self.client.update(post_text)
-        puts "#{post_text}\n\n"
+        puts post_text
       end
 
     # Twitter::Error::RequestTimeout: exection expired
@@ -84,7 +84,7 @@ module Moritan
         0.upto(texts.size - 2) do |i|
           texts[i] = twitter_id ? "@#{twitter_id} #{texts[i]}(続く)" : "#{texts[i]}(続く)"
           self.client.update(texts[i],{:in_reply_to_status_id => status_id})
-          puts "#{texts[i]}\n\n"
+          puts texts[i]
         end
       rescue Twitter::Error
         try += 1

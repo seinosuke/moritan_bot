@@ -2,6 +2,8 @@
 
 require File.expand_path(Dir.home + '/bot/moritan_bot/spec/spec_helper')
 
+$stdout = File.open('/dev/null', 'w')
+
 describe Moritan::Bot do
 
   #
@@ -24,7 +26,6 @@ describe Moritan::Bot do
     context '正常に投稿できた場合' do
       it do
         allow(@twitter_client_mock).to receive(:update)
-        printf "    投稿内容： "
         expect{ @moritanbot.post("foo") }.not_to raise_error
       end
     end

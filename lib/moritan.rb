@@ -24,7 +24,6 @@ require_relative "moritan/function/extensions"
 def error_logs(text = "")
   puts Time.now
   puts "#{text} error! #{$!.class}: #{$!}\n#{$@[0]}"
-  puts ""
 end
 
 module Moritan
