@@ -15,7 +15,7 @@ module Moritan
     class << self
 
       # 新規登録
-      def entry(twitter_id="", credit:Hash.new)
+      def create_user(twitter_id="", credit:Hash.new)
         user = self.new do |u|
           u.twitter_id = twitter_id
           u.context = ""

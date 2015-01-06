@@ -23,7 +23,7 @@ module Moritan
 
       # ユーザーが登録されていなかったら新しく作る
       unless Moritan::DataBase.exist?(twitter_id:twitter_id)
-        Moritan::User.entry(twitter_id)
+        Moritan::User.create_user(twitter_id)
       end
       user = Moritan::DataBase.new(twitter_id)
       gpa = user.get_gpa(grade)
@@ -36,7 +36,7 @@ module Moritan
     # 現在のGPA等を返す
     def get_record_text(twitter_id)
       unless Moritan::DataBase.exist?(twitter_id:twitter_id)
-        Moritan::User.entry(twitter_id)
+        Moritan::User.create_user(twitter_id)
       end
       user = Moritan::DataBase.new(twitter_id)
       members_num = Moritan::DataBase.last_id
@@ -76,7 +76,7 @@ module Moritan
     def request_response(contents, twitter_id)
       # ユーザーが登録されていなかったら新しく作る
       unless Moritan::DataBase.exist?(twitter_id:twitter_id)
-        Moritan::User.entry(twitter_id)
+        Moritan::User.create_user(twitter_id)
       end
       user = Moritan::DataBase.new(twitter_id)
 
