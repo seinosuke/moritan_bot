@@ -2,8 +2,6 @@
 
 require File.expand_path(Dir.home + '/bot/moritan_bot/spec/spec_helper')
 
-$stdout = File.open('/dev/null', 'w')
-
 describe Moritan::Bot do
 
   #
@@ -17,6 +15,11 @@ describe Moritan::Bot do
     @moritanbot = Moritan::Bot.new(debug:true, mention:true)
     @twitter_client_mock = double('Twitter client')
     allow(@moritanbot).to receive(:client).and_return(@twitter_client_mock)
+    $stdout = File.open('/dev/null', 'w')
+  end
+
+  after do
+    $stdout = STDOUT
   end
 
   #

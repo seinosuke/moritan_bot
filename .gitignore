@@ -4,6 +4,7 @@ control/
 
 Rakefile
 rsync-exclude
+Gemfile.lock
 moritan.sh
 moritan_kill.sh
 

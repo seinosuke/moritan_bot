@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.1.4'
+ruby '2.2.0'
 #ruby-gemset=moritan_bot
 
 group :test do
@@ -8,11 +8,10 @@ group :test do
   gem 'guard-rspec', '4.5.0'
 end
 
-gem 'twitter', '5.11.0'
+gem 'twitter', '5.13.0'
 gem 'tweetstream', '2.6.1'
-gem 'activerecord', '4.0.5'
-gem 'sqlite3', '1.3.8'
-gem 'eventmachine', '~> 1.0.3'
-gem 'net-ping', '~> 1.7.4'
+gem 'activerecord', '4.2.0'
+gem 'sqlite3', '1.3.10'
+gem 'net-ping', '~> 1.7.6'
 gem 'net-ssh', '~> 2.9.1'
-gem 'clockwork', '~> 0.7.7'
+gem 'clockwork', '~> 1.1.0'
