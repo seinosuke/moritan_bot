@@ -25,7 +25,7 @@ end
 class Complex
   def to_str
     return "0" if self.real == 0 && self.imag == 0
-    return "#{self.image.to_r.to_integer}i" if self.real == 0
+    return "#{self.imag.to_r.to_integer}i" if self.real == 0
     return "#{self.real.to_r.to_integer}" if self.imag == 0
     return "#{self.numerator}" if self.denominator == 1
     return "(#{self.numerator})/#{self.denominator}"

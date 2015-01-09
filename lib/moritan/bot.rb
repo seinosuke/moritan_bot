@@ -136,6 +136,7 @@ module Moritan
         when /(計算機室|機室|きしつ)/ then @function.get_ping_result(@ssh_config)
         when /(単位|たんい)/ then @function.get_gacha_result(contents, twitter_id)
         when /(成績|GPA)/ then @function.get_record_text(twitter_id)
+        when /(図書館|としょかん)/ then @function.get_opening_hours
 
         else # どのキーワードにも当てはまらなかったら
           @function.get_response_text(contents, twitter_id)

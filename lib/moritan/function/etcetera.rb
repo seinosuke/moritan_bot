@@ -48,6 +48,18 @@ module Moritan
       return text
     end
 
+    # 図書館の開館時間を返す
+    def get_opening_hours
+      url = "http://www.tulips.tsukuba.ac.jp/lib/"
+      doc = Nokogiri::HTML(open(url)) rescue return
+      opening_hours = doc.xpath("//span[@class='opening-hours']").text
+        if opening_hours == "休館"
+          return "本日中央図書館は休館です"
+        else
+          return "本日の中央図書館開館時間は#{opening_hours}です"
+        end
+    end
+
     # どのキーワードにも当てはまらなかったら
     def get_response_text(contents, twitter_id)
       text = nil
