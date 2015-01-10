@@ -8,21 +8,14 @@ module Moritan
 
     attr_accessor :rep_table
 
-    NOT_HERMITIAN_ERRMSG = 
-      "成分に虚数を含む行列の固有値計算はエルミート行列のみ対応しています"
-
-    INVALID_FORMAT_ERRMSG = <<-EOS.gsub(/ {6}/,"")
-      \nフォーマットが違います
-      使い方はこちらを参照してください
-      https://sites.google.com/site/moritanbot/home
-      EOS
-
-    def initialize(table, api_key)
-      @rep_table = table
+    def initialize(rep_table, config)
+      @rep_table = rep_table
+      @config = config
+      @error_message = @config['error_message']
       @random = Random.new(Time.new.to_i)
 
       # 雑談対話API
-      api_url = "https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{api_key}"
+      api_url = "https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=#{@config['api_key']}"
       @uri = URI.parse(api_url)
       @http = Net::HTTP.new(@uri.host, @uri.port)
       @http.use_ssl = true

@@ -19,8 +19,6 @@ ssh:
     :password: 
     :port: 22
 
-api_key: 
-
 ReplayTable:
   self:
     - !ruby/regexp /(moritan|もりたん)(bot|ぼっと|ボット)?/i
@@ -29,7 +27,7 @@ ReplayTable:
     - !ruby/regexp /^(moritan|もりたん)(bot|ぼっと|ボット)?$/i
     - ["はい","なんですか"]
 
-  comprehensible:
+  mention:
     - 
       - ["ありがと","さんくす",!ruby/regexp /(thank|thx)/i]
       - ["どういたしまして","いえいえ"]
@@ -87,3 +85,16 @@ ReplayTable:
           "対角行列","同形写像","ノルム","掃き出し","ハミルトン・ケーリーの定理","張る空間",
           "表現行列","複素線形空間","フロベニゥスの定理","ベクトル空間","ユニタリ行列",
           "ユニタリ空間","余因子行列","零行列",]
+
+Function:
+  api_key: 
+
+  error_message:
+    not_regular: "正則行列じゃないです"
+    not_square: "正方行列じゃないです"
+    not_hermitian: "成分に虚数を含む行列の固有値計算はエルミート行列のみ対応しています"
+    invalid_format: |
+      
+      フォーマットが違います
+      使い方はこちらを参照してください
+      https://sites.google.com/site/moritanbot/home

@@ -19,9 +19,9 @@ module Moritan
     def get_rank_str(text)
       Moritan::Matrix.rank(text).to_s
     rescue NoMethodError
-      return Moritan::Function::INVALID_FORMAT_ERRMSG
+      return @error_message['invalid_format']
     rescue ExceptionForMatrix::ErrDimensionMismatch
-      return "行列の形が不正です"
+      return @error_message['invalid_format']
     end
 
     # 逆行列
@@ -33,20 +33,20 @@ module Moritan
         row.gsub!(/, $/,"")
       end.join
     rescue NoMethodError
-      return Moritan::Function::INVALID_FORMAT_ERRMSG
+      return @error_message['invalid_format']
     rescue ExceptionForMatrix::ErrDimensionMismatch
-      return "正方行列じゃないです"
+      return @error_message['not_square']
     rescue ExceptionForMatrix::ErrNotRegular
-      return "正則行列じゃないです"
+      return @error_message['not_regular']
     end
 
     # 行列式
     def get_det_str(text)
       Moritan::Matrix.determinant(text).to_str
     rescue NoMethodError
-      return Moritan::Function::INVALID_FORMAT_ERRMSG
+      return @error_message['invalid_format']
     rescue ExceptionForMatrix::ErrDimensionMismatch
-      return "正方行列じゃないです"
+      return @error_message['not_square']
     end
 
     # 固有値
@@ -59,11 +59,11 @@ module Moritan
         end
       end.join.sub(/、\s$/,"")
     rescue NoMethodError
-      return Moritan::Function::INVALID_FORMAT_ERRMSG
+      return @error_message['invalid_format']
     rescue ExceptionForMatrix::ErrNotHermitian
-      return Moritan::Function::NOT_HERMITIAN_ERRMSG
+      return @error_message['not_hermitian']
     rescue ExceptionForMatrix::ErrDimensionMismatch
-      return "正方行列じゃないです"
+      return @error_message['not_square']
     end
 
     module_function

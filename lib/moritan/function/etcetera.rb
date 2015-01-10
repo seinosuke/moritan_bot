@@ -40,7 +40,7 @@ module Moritan
       end
       user = Moritan::DataBase.new(twitter_id)
       members_num = Moritan::DataBase.last_id
-      text = <<-EOS.gsub(/ {6}/,"").%(user.credit.gpa.round(2))
+      text = <<-EOS.gsub(/^ +/, "").%(user.credit.gpa.round(2))
       \n合計履修単位数 #{user.credit.total}単位
       GPAランキング #{members_num}人中#{user.rank}位
       [GPA: %.2f]
@@ -69,7 +69,7 @@ module Moritan
           throw :exit
         end
 
-        @rep_table['comprehensible'].each do |row|
+        @rep_table['mention'].each do |row|
           if row[0].any? {|keyword| contents.index(keyword) }
             text = row[1].sample
             throw :exit

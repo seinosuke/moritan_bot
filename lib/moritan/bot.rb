@@ -12,7 +12,7 @@ module Moritan
       @config = YAML.load_file(Moritan::CONF_FILE)
 
       @ssh_config = @config['ssh']
-      @function = Moritan::Function.new(@config['ReplayTable'], @config['api_key'])
+      @function = Moritan::Function.new(@config['ReplayTable'], @config['Function'])
       @name = debug ? @config['name_debug'] : @config['name']
 
       oauth = debug ? 'oauth_debug' : 'oauth'
