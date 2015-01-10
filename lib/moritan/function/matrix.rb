@@ -101,7 +101,9 @@ module Moritan
  
       case [mat.column_size, mat.row_size]
       when [2, 2]
-        Moritan::MatrixHelper.check_hermitian(mat) if text.index(/i/)
+        if text.index(/i/) && !mat.hermitian?
+          raise ExceptionForMatrix::ErrNotHermitian
+        end
         b = mat[0, 0] + mat[1, 1]
         c = mat.determinant
         # どちらかが0であっても（0/1）になっているのでlcmをとれる
@@ -112,7 +114,9 @@ module Moritan
         Moritan::MatrixHelper.solve_equation2(a, b.real, c.real)
 
       when [3, 3]
-        Moritan::MatrixHelper.check_hermitian(mat) if text.index(/i/)
+        if text.index(/i/) && !mat.hermitian?
+          raise ExceptionForMatrix::ErrNotHermitian
+        end
         b = -(mat[0,0] + mat[1,1] + mat[2,2])
         c = mat[0,0]*mat[1,1] + mat[1,1]*mat[2,2] + mat[2,2]*mat[0,0] -
             mat[0,1]*mat[1,0] - mat[1,2]*mat[2,1] - mat[2,0]*mat[0,2]

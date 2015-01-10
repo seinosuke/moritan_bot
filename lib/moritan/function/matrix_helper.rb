@@ -80,7 +80,7 @@ module Moritan
         return
 
       when [true,true,false]
-        ans_str = <<-EOS.gsub(/ {8}/,"")
+        ans_str = <<-EOS.gsub(/^ +/, "")
         \nω = (-1+√3i)/2
         α = ∛(#{Rational(-d, a).to_integer}) としたとき
         α、 αω、 αω^2
@@ -106,21 +106,6 @@ module Moritan
           temp = Rational(d_divisor, a_divisor)
           return  temp if (a*(temp**3)    + b*(temp**2)    + c*temp + d) == 0
           return -temp if (a*((-temp)**3) + b*((-temp)**2) - c*temp + d) == 0
-        end
-      end
-      return
-    end
-
-    # エルミート行列であるか調べる
-    def check_hermitian(mat)
-      mat.column_size.times do |n|
-        if mat[n,n].imag != 0
-          raise ExceptionForMatrix::ErrNotHermitian.new("Not Hermitian Matrix")
-        end
-      end
-      Array.new(mat.column_size){|e|e}.combination(2) do |arr|
-        if mat[arr[0],arr[1]].conj != mat[arr[1],arr[0]]
-          raise ExceptionForMatrix::ErrNotHermitian.new("Not Hermitian Matrix")
         end
       end
       return
