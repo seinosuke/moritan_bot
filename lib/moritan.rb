@@ -21,7 +21,7 @@ require 'clockwork'
 require 'json'
 require 'openssl'
 
-require_relative "moritan/function/extensions"
+require_relative "moritan/extensions"
 
 def error_logs(text = "")
   puts Time.now
@@ -37,15 +37,15 @@ module Moritan
   DB_FILE      = File.join(Moritan::BASE_DIR, 'bin/moritan_bot.db')
   TEST_DB_FILE = File.join(Moritan::BASE_DIR, 'bin/test.db')
 
-  require_relative "moritan/database/user"
-  require_relative "moritan/database/credit"
+  require_relative "moritan/user"
+  require_relative "moritan/credit"
   require_relative "moritan/database"
 
-  require_relative "moritan/function/matrix_helper"
-  require_relative "moritan/function/matrix"
-  require_relative "moritan/function/pcnode"
-  require_relative "moritan/function/pcroom"
-  require_relative "moritan/function/etcetera"
+  require_relative "moritan/matrix_helper"
+  require_relative "moritan/matrix"
+  require_relative "moritan/pcnode"
+  require_relative "moritan/pcroom"
+  require_relative "moritan/etcetera"
   require_relative "moritan/function"
 
   require_relative "moritan/bot"
