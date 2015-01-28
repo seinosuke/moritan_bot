@@ -131,6 +131,7 @@ module Moritan
         when /^(階数)/   then @function.get_rank_str(contents)
         when /^(逆行列)/ then @function.get_invmat_str(contents)
         when /^(行列式)/ then @function.get_det_str(contents)
+        when /^(2|3|4|２|３|４|)乗$/ then @function.get_power_str(contents)
         when /^(固有値)/ then @function.get_eigen_str(contents)
 
         when /(計算機室|機室|きしつ)/ then @function.get_ping_result(@ssh_config)

@@ -49,15 +49,31 @@ module Moritan
       return @error_message['not_square']
     end
 
+    # べき乗
+    def get_power_str(text)
+      mat = Moritan::Matrix.power(text)
+      mat.row_size.times.map do |i|
+        row = "\n"
+        mat.row(i).each{|e| row += "#{e.to_str}, "}
+        row.gsub!(/, $/,"")
+      end.join
+    rescue NoMethodError
+      return @error_message['invalid_format']
+    rescue ExceptionForMatrix::ErrDimensionMismatch
+      return @error_message['not_square']
+    rescue ExceptionForMatrix::ErrNotRegular
+      return @error_message['not_regular']
+    end
+
     # 固有値
     def get_eigen_str(text)
       Moritan::Matrix.eigen(text).map do |e|
         case e[1]
-        when 1 then "#{e[0]}、 "
-        when 2 then "#{e[0]} (重解)、 "
+        when 1 then "#{e[0]}, "
+        when 2 then "#{e[0]} (重解), "
         when 3 then "#{e[0]} (3重解)"
         end
-      end.join.sub(/、\s$/,"")
+      end.join.sub(/,\s$/,"")
     rescue NoMethodError
       return @error_message['invalid_format']
     rescue ExceptionForMatrix::ErrNotHermitian
@@ -90,6 +106,16 @@ module Moritan
       raise NoMethodError unless func_name =~ /^行列式$/
       text.sub!(/#{func_name}.?/m, "")
       text.to_mat.determinant
+    end
+
+    # べき乗 Matrixクラスのオブジェクトを返す
+    def power(text)
+      text = NKF.nkf('-m0 -Z1 -w', text)
+      func_name = text.split("\n")[0]
+      raise NoMethodError unless func_name =~ /^\d+乗$/
+      func_name =~ /^\d+/
+      text.sub!(/#{func_name}.?/m, "")
+      text.to_mat ** Regexp.last_match[0].to_i
     end
 
     # 固有値 [["解", 重複度], ["解", 重複度], …]という配列を返す

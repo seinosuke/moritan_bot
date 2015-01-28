@@ -48,7 +48,7 @@ describe 'Moritan::Bot#generate_reply' do
         0, 0, 2
         EOS
       end
-      it { is_expected.to eq "1 (重解)、 2" }
+      it { is_expected.to eq "1 (重解), 2" }
     end
 
     # (3重解) がつくか確認
