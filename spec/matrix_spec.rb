@@ -132,6 +132,30 @@ describe Moritan::Matrix do
   end # ::determinant
 
   #
+  # べき乗
+  #
+  describe '::inverse' do
+    let(:func_name) { '2乗' }
+    subject { Moritan::Matrix.power(text) }
+
+    context '2次正則行列の場合' do
+      let(:matrix_str) do
+        <<-EOM.gsub(/ {8}/,"")
+        1, 0
+        0, 1
+        EOM
+      end
+      ans = Matrix[[1, 0], [0, 1]].map(&:to_c)
+      it { is_expected.to eq ans }
+    end
+
+    context '正方行列でない場合' do
+      include_context '正方行列でない行列'
+      it_behaves_like 'raise ErrDimensionMismatch'
+    end
+  end # ::power
+
+  #
   # 固有値
   #
   describe '::eigen' do

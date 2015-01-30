@@ -61,8 +61,6 @@ module Moritan
       return @error_message['invalid_format']
     rescue ExceptionForMatrix::ErrDimensionMismatch
       return @error_message['not_square']
-    rescue ExceptionForMatrix::ErrNotRegular
-      return @error_message['not_regular']
     end
 
     # 固有値
