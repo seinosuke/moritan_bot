@@ -60,6 +60,13 @@ module Moritan
         end
     end
 
+    # 機室の起動台数
+    def get_ping_result
+      room = Moritan::PCroom.new(2..91, timeout:3, ssh:@config['ssh'])
+      "\n現在90台中#{room.count(:on)}台稼働中"
+    end
+
+
     # どのキーワードにも当てはまらなかったら
     def get_response_text(contents, twitter_id)
       text = nil

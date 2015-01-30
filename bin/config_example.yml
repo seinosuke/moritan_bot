@@ -13,12 +13,6 @@ oauth_debug:
   oauth_token: 
   oauth_token_secret: 
 
-ssh:
-  :username: 
-  :opt:
-    :password: 
-    :port: 22
-
 ReplayTable:
   self:
     - !ruby/regexp /(moritan|もりたん)(bot|ぼっと|ボット)?/i
@@ -88,6 +82,12 @@ ReplayTable:
 
 Function:
   api_key: 
+
+  ssh:
+    :username: 
+    :opt:
+      :password: 
+      :port: 22
 
   error_message:
     not_regular: "正則行列じゃないです"

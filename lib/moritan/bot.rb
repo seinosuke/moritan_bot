@@ -11,7 +11,6 @@ module Moritan
     def initialize(debug:false, mention:false)
       @config = YAML.load_file(Moritan::CONF_FILE)
 
-      @ssh_config = @config['ssh']
       @function = Moritan::Function.new(@config['ReplayTable'], @config['Function'])
       @name = debug ? @config['name_debug'] : @config['name']
 
@@ -127,21 +126,7 @@ module Moritan
     def generate_reply(contents, twitter_id, reply_id)
       contents = contents.gsub(/@\w*/,"")
       contents = contents.gsub(/ |\p{blank}|\t/,"")
-      rep_text = case contents
-        when /^(階数)/   then @function.get_rank_str(contents)
-        when /^(逆行列)/ then @function.get_invmat_str(contents)
-        when /^(行列式)/ then @function.get_det_str(contents)
-        when /^(2|3|4|２|３|４|)乗$/ then @function.get_power_str(contents)
-        when /^(固有値)/ then @function.get_eigen_str(contents)
-
-        when /(計算機室|機室|きしつ)/ then @function.get_ping_result(@ssh_config)
-        when /(単位|たんい)/ then @function.get_gacha_result(contents, twitter_id)
-        when /(成績|GPA)/ then @function.get_record_text(twitter_id)
-        when /(図書館|としょかん)/ then @function.get_opening_hours
-
-        else # どのキーワードにも当てはまらなかったら
-          @function.get_response_text(contents, twitter_id)
-        end
+      rep_text = @function.get_reply_text(contents, twitter_id)
       rep_text ||= @function.get_response_text(contents, twitter_id)
       return rep_text
 
