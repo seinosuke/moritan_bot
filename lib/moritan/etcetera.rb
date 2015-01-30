@@ -4,7 +4,7 @@ module Moritan
   module Etcetera
 
     # 単位ガチャ
-    def get_gacha_result(contents, twitter_id)
+    def get_gacha_result(contents = "", twitter_id = "")
       if contents =~ /の単位/
         subject = contents.split(/の単位/)[0]
         if subject.size > 20 || subject.empty?
@@ -34,7 +34,7 @@ module Moritan
     end
 
     # 現在のGPA等を返す
-    def get_record_text(twitter_id)
+    def get_record_str(twitter_id = "")
       unless Moritan::DataBase.exist?(twitter_id:twitter_id)
         Moritan::User.create_user(twitter_id)
       end
@@ -60,8 +60,15 @@ module Moritan
         end
     end
 
+    # 機室の起動台数
+    def get_ping_result
+      room = Moritan::PCroom.new(2..91, timeout:3, ssh:@config['ssh'])
+      "\n現在90台中#{room.count(:on)}台稼働中"
+    end
+
+
     # どのキーワードにも当てはまらなかったら
-    def get_response_text(contents, twitter_id)
+    def get_reply_str(contents = "", twitter_id = "")
       text = nil
       catch(:exit) do
         if contents.match(@rep_table['self'][0])
@@ -85,7 +92,7 @@ module Moritan
     module_function
 
     # 雑談対話
-    def request_response(contents, twitter_id)
+    def request_response(contents = "", twitter_id = "")
       # ユーザーが登録されていなかったら新しく作る
       unless Moritan::DataBase.exist?(twitter_id:twitter_id)
         Moritan::User.create_user(twitter_id)

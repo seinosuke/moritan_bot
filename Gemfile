@@ -6,6 +6,7 @@ group :test do
   gem 'rspec', '~> 3.1.0'
   gem 'factory_girl', '~> 4.5.0'
   gem 'guard-rspec', '4.5.0'
+  gem 'libnotify', '0.9.1'
 end
 
 gem 'twitter', '5.13.0'

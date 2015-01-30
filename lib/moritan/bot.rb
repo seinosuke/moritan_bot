@@ -11,7 +11,6 @@ module Moritan
     def initialize(debug:false, mention:false)
       @config = YAML.load_file(Moritan::CONF_FILE)
 
-      @ssh_config = @config['ssh']
       @function = Moritan::Function.new(@config['ReplayTable'], @config['Function'])
       @name = debug ? @config['name_debug'] : @config['name']
 
@@ -105,48 +104,32 @@ module Moritan
       error_logs("fav")
     end
 
-    # メンションじゃない投稿に反応
+    # メンションじゃない投稿に対する返しを生成
     def generate_response(contents, status_id, moritanbot)
-      res_text = nil
-      contents = contents.gsub(/@\w*/,"")
-      contents = contents.gsub(/(\s|\p{blank})/,"")
-      case contents
-      when @function.rep_table['self'][0]
-        moritanbot.fav(status_id)
-        if contents.match(@function.rep_table['call'][0])
-          res_text = @function.rep_table['call'][1].sample
-        end
-      end
-      return res_text
-
+      contents = contents_filter(contents)
+      moritanbot.fav(status_id)
+      res_text = @function.get_response_text(contents)
+      res_text
     rescue
       error_logs("generate_response")
     end
 
-    # メンションに反応
+    # メンションに対する返しを生成
     def generate_reply(contents, twitter_id, reply_id)
-      contents = contents.gsub(/@\w*/,"")
-      contents = contents.gsub(/ |\p{blank}|\t/,"")
-      rep_text = case contents
-        when /^(階数)/   then @function.get_rank_str(contents)
-        when /^(逆行列)/ then @function.get_invmat_str(contents)
-        when /^(行列式)/ then @function.get_det_str(contents)
-        when /^(2|3|4|２|３|４|)乗$/ then @function.get_power_str(contents)
-        when /^(固有値)/ then @function.get_eigen_str(contents)
-
-        when /(計算機室|機室|きしつ)/ then @function.get_ping_result(@ssh_config)
-        when /(単位|たんい)/ then @function.get_gacha_result(contents, twitter_id)
-        when /(成績|GPA)/ then @function.get_record_text(twitter_id)
-        when /(図書館|としょかん)/ then @function.get_opening_hours
-
-        else # どのキーワードにも当てはまらなかったら
-          @function.get_response_text(contents, twitter_id)
-        end
-      rep_text ||= @function.get_response_text(contents, twitter_id)
-      return rep_text
-
+      contents = contents_filter(contents)
+      rep_text = @function.get_reply_text(contents, twitter_id)
+      rep_text ||= @function.get_reply_str(contents, twitter_id)
+      rep_text
     rescue
       error_logs("generate_reply")
+    end
+
+    private
+
+    def contents_filter(contents = "")
+      contents = contents.gsub(/@\w*/, "")
+      contents = contents.gsub(/ |\p{blank}|\t/, "")
+      contents
     end
   end
 end
