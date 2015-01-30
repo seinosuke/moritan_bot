@@ -104,34 +104,32 @@ module Moritan
       error_logs("fav")
     end
 
-    # メンションじゃない投稿に反応
+    # メンションじゃない投稿に対する返しを生成
     def generate_response(contents, status_id, moritanbot)
-      res_text = nil
-      contents = contents.gsub(/@\w*/,"")
-      contents = contents.gsub(/(\s|\p{blank})/,"")
-      case contents
-      when @function.rep_table['self'][0]
-        moritanbot.fav(status_id)
-        if contents.match(@function.rep_table['call'][0])
-          res_text = @function.rep_table['call'][1].sample
-        end
-      end
-      return res_text
-
+      contents = contents_filter(contents)
+      moritanbot.fav(status_id)
+      res_text = @function.get_response_text(contents)
+      res_text
     rescue
       error_logs("generate_response")
     end
 
-    # メンションに反応
+    # メンションに対する返しを生成
     def generate_reply(contents, twitter_id, reply_id)
-      contents = contents.gsub(/@\w*/,"")
-      contents = contents.gsub(/ |\p{blank}|\t/,"")
+      contents = contents_filter(contents)
       rep_text = @function.get_reply_text(contents, twitter_id)
-      rep_text ||= @function.get_response_text(contents, twitter_id)
-      return rep_text
-
+      rep_text ||= @function.get_reply_str(contents, twitter_id)
+      rep_text
     rescue
       error_logs("generate_reply")
+    end
+
+    private
+
+    def contents_filter(contents = "")
+      contents = contents.gsub(/@\w*/, "")
+      contents = contents.gsub(/ |\p{blank}|\t/, "")
+      contents
     end
   end
 end
