@@ -55,7 +55,7 @@ module Moritan
         post(over_text, twitter_id:twitter_id, status_id:status_id)
       end
 
-      post_text = post_text ? post_text : text
+      post_text ||= text
       post_text = "@#{twitter_id} #{post_text}" if twitter_id
       self.client.update(post_text, in_reply_to_status_id: status_id)
       puts post_text
@@ -81,8 +81,8 @@ module Moritan
     # メンションじゃない投稿に対する返しを生成
     def generate_response(contents, status_id, moritanbot)
       contents = contents_filter(contents)
-      moritanbot.fav(status_id)
       res_text = @function.get_response_text(contents)
+      moritanbot.fav(status_id) if res_text
       res_text
     rescue
       error_logs("generate_response")

@@ -27,7 +27,7 @@ module Moritan
     def get_response_text(contents = "")
       case contents
       when @rep_table['self'][0]
-        if contents.match(@function.rep_table['call'][0])
+        if contents.match(@rep_table['call'][0])
           @rep_table['call'][1].sample
         end
       else nil
