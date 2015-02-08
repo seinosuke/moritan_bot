@@ -38,8 +38,21 @@ describe 'Moritan::Bot#generate_reply' do
       it { is_expected.to eq "\n1, 0\n0, 1" }
     end
 
+    # 行列の形になって返ってきているか確認
+    context 'べき乗の場合' do
+      let(:contents) do
+        <<-EOS
+        @#{@moritanbot.name} 2乗
+        1, 0, 0
+        0, 2, 0
+        0, 0, 3
+        EOS
+      end
+      it { is_expected.to eq "\n1, 0, 0\n0, 4, 0\n0, 0, 9" }
+    end
+
     # (重解) がつくか確認
-    context '固有値の場合1' do
+    context '固有値の場合01' do
       let(:contents) do
         <<-EOS
         @#{@moritanbot.name} 固有値
@@ -52,7 +65,7 @@ describe 'Moritan::Bot#generate_reply' do
     end
 
     # (3重解) がつくか確認
-    context '固有値の場合2' do
+    context '固有値の場合02' do
       let(:contents) do
         <<-EOS
         @#{@moritanbot.name} 固有値

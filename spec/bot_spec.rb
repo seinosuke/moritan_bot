@@ -42,9 +42,9 @@ describe Moritan::Bot do
     end
 
     context '140文字以上の投稿を要求された場合' do
-      it 'chain_postが呼ばれる' do
+      it 'postが再帰的に呼ばれる' do
         allow(@twitter_client_mock).to receive(:update)
-        expect(@moritanbot).to receive(:chain_post)
+        expect(@moritanbot).to receive(:post)
         @moritanbot.post('foo'*100)
       end
     end

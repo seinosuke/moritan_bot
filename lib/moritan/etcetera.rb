@@ -68,7 +68,7 @@ module Moritan
 
 
     # どのキーワードにも当てはまらなかったら
-    def get_reply_str(contents = "", twitter_id = "")
+    def get_reply_text(contents = "", twitter_id = "")
       text = nil
       catch(:exit) do
         if contents.match(@rep_table['self'][0])
@@ -83,7 +83,6 @@ module Moritan
           end
         end
       end
-
       text ||= request_response(contents, twitter_id)
       text ||= @rep_table['terms'].sample
       return text
