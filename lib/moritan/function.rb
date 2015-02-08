@@ -40,7 +40,7 @@ module Moritan
       when /^(階数)/   then get_rank_str(contents)
       when /^(逆行列)/ then get_invmat_str(contents)
       when /^(行列式)/ then get_det_str(contents)
-      when /^(2|3|4|２|３|４|20)乗$/ then get_power_str(contents)
+      when /^(2|3|4|２|３|４)乗$/ then get_power_str(contents)
       when /^(固有値)/ then get_eigen_str(contents)
 
       when /(計算機室|機室|きしつ)/ then get_ping_result

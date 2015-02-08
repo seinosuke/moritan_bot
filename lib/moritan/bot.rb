@@ -43,21 +43,19 @@ module Moritan
       @OAUTH_TOEKN_SECRET = @config[oauth]['oauth_token_secret']
     end
 
-    # 通常の投稿
+    # 投稿
     def post(text = "", twitter_id:nil, status_id:nil)
-      text = twitter_id ? "@#{twitter_id} #{text}" : text
-
-      if text.size > 140
-        over_text = text.gsub(/@\w* /)
+      if (text.size + twitter_id.to_s.size) > 139
         twitter_id_size = twitter_id ? ("@#{twitter_id}".size + 1) : 0
-
-        # ↓”＠〜”と”（続く）”4文字を除いた最終的にpostに返せる最大文字数で分割
         post_size = 140 - (twitter_id_size + 4)
-        post_text, *over_texts = over_text.reverse.scan(/.{1,#{post_size}}/m)
-        post("#{over_texts.join.reverse}(続く)", twitter_id:twitter_id, status_id:status_id)
+        *over_texts, last_over_text, post_text = text.scan(/.{1,#{post_size}}/m)
+        last_over_text.match(/.{1,4}$/)
+        post_text = $& << post_text
+        over_text = over_texts.join << last_over_text.sub(/#{$&}$/, "") << "(続く)"
+        post(over_text, twitter_id:twitter_id, status_id:status_id)
       end
 
-      post_text = post_text ? post_text.reverse : text
+      post_text = post_text ? post_text : text
       post_text = "@#{twitter_id} #{post_text}" if twitter_id
       self.client.update(post_text, in_reply_to_status_id: status_id)
       puts post_text
