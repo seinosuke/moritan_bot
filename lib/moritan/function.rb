@@ -35,12 +35,12 @@ module Moritan
     end
 
     # メンションに含まれるキーワードを判断し機能を呼び出す
-    def get_reply_text(contents = "", twitter_id = "")
+    def get_function_text(contents = "", twitter_id = "")
       case contents
       when /^(階数)/   then get_rank_str(contents)
       when /^(逆行列)/ then get_invmat_str(contents)
       when /^(行列式)/ then get_det_str(contents)
-      when /^(2|3|4|２|３|４|)乗$/ then get_power_str(contents)
+      when /^(2|3|4|２|３|４|20)乗$/ then get_power_str(contents)
       when /^(固有値)/ then get_eigen_str(contents)
 
       when /(計算機室|機室|きしつ)/ then get_ping_result
@@ -49,7 +49,7 @@ module Moritan
       when /(図書館|としょかん)/ then get_opening_hours
 
       else # どのキーワードにも当てはまらなかったら
-        get_reply_str(contents, twitter_id)
+        get_reply_text(contents, twitter_id)
       end
     end
   end

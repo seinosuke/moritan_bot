@@ -48,15 +48,17 @@ module Moritan
       text = twitter_id ? "@#{twitter_id} #{text}" : text
 
       if text.size > 140
-        over_text = text
+        over_text = text.gsub(/@\w* /)
         twitter_id_size = twitter_id ? ("@#{twitter_id}".size + 1) : 0
+
         # ↓”＠〜”と”（続く）”4文字を除いた最終的にpostに返せる最大文字数で分割
         post_size = 140 - (twitter_id_size + 4)
-        post_text, *over_text = text.reverse.scan(/.{1,#{post_size}}/m)
-        post("#{over_text.join.reverse}(続く)", twitter_id:twitter_id, status_id:status_id)
+        post_text, *over_texts = over_text.reverse.scan(/.{1,#{post_size}}/m)
+        post("#{over_texts.join.reverse}(続く)", twitter_id:twitter_id, status_id:status_id)
       end
 
       post_text = post_text ? post_text.reverse : text
+      post_text = "@#{twitter_id} #{post_text}" if twitter_id
       self.client.update(post_text, in_reply_to_status_id: status_id)
       puts post_text
 
@@ -91,8 +93,8 @@ module Moritan
     # メンションに対する返しを生成
     def generate_reply(contents, twitter_id, reply_id)
       contents = contents_filter(contents)
-      rep_text = @function.get_reply_text(contents, twitter_id)
-      rep_text ||= @function.get_reply_str(contents, twitter_id)
+      rep_text = @function.get_function_text(contents, twitter_id)
+      rep_text ||= @function.get_reply_text(contents, twitter_id)
       rep_text
     rescue
       error_logs("generate_reply")
