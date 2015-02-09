@@ -3,7 +3,7 @@
 # 指定のフォーマットの文字列を成分がComplexである行列にして返す
 class String
   def to_mat
-    return nil if self.empty? || self.index(/\./)
+    return nil if self.empty?
     rows = NKF.nkf('-m0 -Z1 -w', self).split("\n")
     rows.each_with_index do |row, i|
       return nil unless row.index(/,|，|、/)

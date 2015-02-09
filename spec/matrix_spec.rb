@@ -317,6 +317,17 @@ describe Moritan::Matrix do
       it { is_expected.to eq ans }
     end
 
+    context '小数を含む行列の場合' do
+      let(:matrix_str) do
+        <<-EOM.gsub(/ {8}/,"")
+        0.5, 0, 0
+        0, 0.5, 0
+        0, 0, 1
+        EOM
+      end
+      it { is_expected.to eq [["1", 1], ["1/2", 2]] }
+    end
+
     context 'エルミート行列でfind_solutionが成功しなかった場合' do
       let(:matrix_str) do
         <<-EOM.gsub(/ {8}/,"")
