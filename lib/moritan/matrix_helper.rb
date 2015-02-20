@@ -3,6 +3,8 @@
 module Moritan
   module MatrixHelper
 
+    using Extensions
+
     module_function
 
     # 2次方程式を解く

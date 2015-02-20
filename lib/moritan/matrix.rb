@@ -15,6 +15,8 @@
 module Moritan
   module Matrix
 
+    using Extensions
+
     # 階数
     def get_rank_str(text)
       Moritan::Matrix.rank(text).to_s
