@@ -47,6 +47,13 @@ module Moritan
       when /(成績|GPA)/ then get_record_str(twitter_id)
       when /(図書館|としょかん)/ then get_opening_hours
 
+      when /^kill$/
+        if twitter_id == YAML.load_file(Moritan::CONF_FILE)['admin']
+          `#{Moritan::BASE_DIR}bin/moritan_kill.sh`
+        else
+          "その操作は禁止されています"
+        end
+
       # どのキーワードにも当てはまらなかったら雑談
       else
         get_reply_text(contents, twitter_id)
