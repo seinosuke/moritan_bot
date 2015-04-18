@@ -81,8 +81,7 @@ module Moritan
     # メンションじゃない投稿に対する返しを生成
     def generate_response(contents, status_id, moritanbot)
       contents = contents_filter(contents)
-      res_text = @function.get_response_text(contents)
-      moritanbot.fav(status_id) if res_text
+      res_text = @function.get_response_text(contents, status_id, moritanbot)
       res_text
     rescue
       error_logs("generate_response")

@@ -24,12 +24,11 @@ module Moritan
 
 
     # メンションじゃない投稿のキーワードを判断し返しを選ぶ
-    def get_response_text(contents = "")
+    def get_response_text(contents = "", status_id, moritanbot)
       case contents
       when @rep_table['self'][0]
-        if contents.match(@rep_table['call'][0])
-          @rep_table['call'][1].sample
-        end
+        moritanbot.fav(status_id)
+        contents.match(@rep_table['call'][0]) ? @rep_table['call'][1].sample : nil
       else nil
       end
     end
@@ -48,7 +47,8 @@ module Moritan
       when /(成績|GPA)/ then get_record_str(twitter_id)
       when /(図書館|としょかん)/ then get_opening_hours
 
-      else # どのキーワードにも当てはまらなかったら
+      # どのキーワードにも当てはまらなかったら雑談
+      else
         get_reply_text(contents, twitter_id)
       end
     end
