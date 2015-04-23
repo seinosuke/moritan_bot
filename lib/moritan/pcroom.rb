@@ -7,9 +7,11 @@ module Moritan
 
     def initialize(range = 2..91, timeout:1, ssh:nil)
       raise "invalid range" unless range.is_a? Range
-      @on_count = 0; @node_list = []; @status_list = [];
+      @on_count = 0
+      @node_list = []
+      @status_list = []
       range.each do |num|
-        @node_list << Moritan::PCnode.new(num, timeout:timeout, ssh:ssh)
+        @node_list << Moritan::PCnode.new(num, timeout:timeout)
       end
     end
 
@@ -19,7 +21,6 @@ module Moritan
         threads << Thread.new do
           @status_list[i] = node.get_status
         end
-        sleep 0.5
       end
       threads.each{|job| job.join}
       return @status_list

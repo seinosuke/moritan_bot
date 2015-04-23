@@ -5,11 +5,9 @@ module Moritan
 
     attr_reader :node_num, :node_num_str, :addr, :status
 
-    def initialize(num, timeout:1, ssh:nil)
+    def initialize(num, timeout:1)
       @node_num = num
       @timeout  = timeout
-      @ssh      = ssh
-      @pre_addr = "ubuntu.u.tsukuba.ac.jp"
 
       case @node_num.to_s.size
       when 1 then @node_num_str = '00' + @node_num.to_s
@@ -20,18 +18,7 @@ module Moritan
     end
 
     def on?
-      Net::SSH.start(@pre_addr, @ssh[:username], @ssh[:opt]) do |s|
-        s.exec!("ping -w #{@timeout} #{@addr}") do |channel, stream, data|
-          if stream == :stdout
-            return false if data =~ /0 received/
-          end
-          raise "connect error" if stream == :stderr
-        end
-      end
-      return true
-    rescue
-      error_logs("esysPinger")
-      return false
+      Net::Ping::External.new(@addr, nil, @timeout).ping?
     end
 
     def get_status
